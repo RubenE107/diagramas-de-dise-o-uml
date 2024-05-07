@@ -1,0 +1,29 @@
+@startuml
+title Diagrama de secuencia listar lectores sancionados
+actor "usuario" as u
+participant "sistema" as s
+database "base de datos" as db  
+
+u -> s:iniciarSesion(correo,contraseña)
+activate s
+u -> s:el usuario presiona boton de ver lectores sancionados
+u -> s:LisarLectoresSacionados()
+activate s
+s -> db:select * from lectores where sancionado = true
+activate db
+deactivate db
+group hay lectores sancionados
+s -> s:retornar lista de lectores sancionados
+note right of u
+ se muestra en la interfaz grafica e puede
+desplazarse usando el scroll del mouse
+
+end note
+else no hay lectores sancionados
+s -> s:retornar mensaje de que no hay lectores sancionados
+s->s: cerrar mensaje despues de 5 segundos
+end
+deactivate s
+
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml 
+
+actor "Usuario" as u
+participant "Sistema" as s
+database "Base de datos" as bd
+
+u -> s: iniciarSesion(correo, contrasena)
+activate s
+u -> s: renovarPrestamo(idLibro, idUsuario)
+activate s
+u ->> s: El usuario presiona el boton Extender Periodo
+s->>s: Verificar si el usuario puede extender el periodo
+group Si el usuario puede extender el periodo
+->s: verUsuario(idUsuario)
+
+activate s
+else Si el usuario no puede extender el periodo
+    s->>s: detecta que el usuario ya tiene una sanccion
+    s--> u: mensaje("No puede extender el periodo, tiene una sancion") 
+    s->>s: Cancelar la operacion
+deactivate s
+end
+u -> s:extenderPrestamo(idLibro)
+activate s
+
+s -> bd: actualizarPrestamo(idLibro)
+activate bd
+s -->> u: Enviar mensaje de confirmacion
+deactivate bd
+deactivate s
+deactivate s
+
+
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+
+actor "usuario" as u
+participant "sistema" as s
+participant "base de datos" as bd
+
+u -> s: iniciarSesion(correo, contraseña)
+activate s
+u -> s: verUsuario(idUsuario)
+activate s
+u -> s: pulsa el boton agregar Sancion
+s -> s: verificar si el usuario tiene sanciones
+group si tiene sanciones
+s -> s: mensaje("El usuario ya tiene sanciones")
+end
+s -> s: mostrar formulario para agregar sancion y el tipo de sancion
+u -> s: llenar formulario
+u -> s: pulsa el boton agregar
+s -> bd: actualiza informacion 
+activate bd
+deactivate bd
+s -> u: mostrar mensaje de que se agrego la sancion
+
+deactivate s
+
+@enduml

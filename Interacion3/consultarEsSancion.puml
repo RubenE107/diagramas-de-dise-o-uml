@@ -1,0 +1,24 @@
+@startuml
+title caso de uso: Consultar el estado de la sanción de un lector
+actor "usuario" as u
+participant "sistema" as s  
+database "base de datos" as bd
+
+u -> s:iniciarSesion(correo,contraseña)
+activate s
+
+u->s:solicita las sanciones del usuario
+s->s:verUsuario(idUsuario)
+activate s
+deactivate s
+s->s: analiza las sanciones y resume todas las sanciones
+group si tienne sanciones
+    s->u: muestra las sanciones en una ventana
+else
+    s->u: muestra que no tiene sanciones
+end
+s->s:ciera la ventana de sanciones
+
+
+
+@enduml

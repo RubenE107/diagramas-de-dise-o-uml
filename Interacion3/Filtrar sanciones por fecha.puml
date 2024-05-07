@@ -1,0 +1,39 @@
+@startuml
+actor "usuario" as u
+participant "sistema" as s
+database "base de datos" as db
+
+u -> s:iniciarSesion(correo,contraseña)
+activate s
+u -> s:LisarLectoresSacionados()
+activate s
+u -> s:presiona el boton listar por periodo
+s -> s: abre la ventana de seleccion de periodo usando un calendario
+s ->u: muestra la ventana de seleccion de periodo
+group seleccion de periodo
+u -> s: selecciona el periodo
+else no selecciona el periodo
+s->s:lisarLectoresSancionados()
+activate s
+deactivate s
+s->u:muestra los lectores sancionados
+else seleciona una fecha
+s->s:lisarLectoresSancionados(periodo)
+activate s
+deactivate s
+s->u:muestra los lectores sancionados
+else el sistema no encuentra lectores sancionados en el periodo seleccionado
+s->u:muestra un mensaje de que no hay lectores sancionados en el periodo seleccionado
+s->s:lisarLectoresSancionados()
+activate s
+deactivate s
+s->u:muestra los lectores sancionados
+
+end  
+s -> db: consulta los lectores sancionados en el periodo seleccionado
+activate db
+deactivate db
+s -> s: muestra los lectores sancionados en el periodo seleccionado
+
+
+@enduml
