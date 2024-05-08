@@ -1,0 +1,35 @@
+@startuml
+title Eliminar sanción
+
+actor "Bibliotecario, Administrador" as Administrador
+
+participant Sistema
+database BaseDatos
+
+
+
+Administrador->Sistema: Solicitar listar sanciones
+Sistema->BaseDatos: Consultar usuarios sancionados
+group Usuarios sancionados encontrados
+    note over Sistema: Usuarios sancionados encontrados
+    Sistema->Administrador: Mostrar lista de usuarios sancionados
+    Administrador->Sistema: Seleccionar usuario
+    Sistema->BaseDatos: Obtener detalles de la sanción del usuario
+    BaseDatos->Sistema: Devolver detalles de la sanción
+    Sistema->Administrador: Mostrar detalles de la sanción del usuario
+    Administrador->Sistema: Confirmar eliminación de sanción
+    Sistema->Administrador: Mostrar mensaje de confirmación("¿Está seguro de eliminar la sanción?")
+    group Confirmación aceptada
+        note over Sistema: Confirmación aceptada
+        Sistema->BaseDatos: Eliminar sanción del usuario
+        BaseDatos->Sistema: Confirmar eliminación
+        Sistema->Administrador: Mostrar mensaje de confirmación("Sanción eliminada correctamente")
+    else Confirmación rechazada
+        note over Sistema: Confirmación rechazada
+        Sistema->Administrador: Mostrar mensaje("Eliminación cancelada")
+    end
+else No hay usuarios sancionados
+    note over Sistema: No hay usuarios sancionados
+    Sistema->Administrador: Mostrar mensaje("No hay usuarios sancionados")
+end
+@enduml

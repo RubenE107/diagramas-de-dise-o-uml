@@ -1,0 +1,26 @@
+@startuml 
+title Caso de uso: Registrar Usuario
+
+actor Administrador as U
+participant Sistema
+
+
+
+->> Sistema: RegistrarUsuario()
+activate Sistema
+U->> Sistema: Click en "Registrarse"
+group Administrador
+
+Sistema->>U: Mostrar formulario (Nombre, Apellidos, Correo, Contraseña, Rol)
+U->> Sistema: Ingresar datos y click en "Registrarse"
+
+
+else Lector 
+
+Sistema->>U: Mostrar formulario (Nombre, Apellidos, Correo, Contraseña)
+U->> Sistema: Ingresar datos y click en "Registrarse"
+
+
+end
+
+@enduml

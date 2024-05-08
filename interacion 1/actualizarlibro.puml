@@ -1,0 +1,54 @@
+@startuml
+title Actualizar Libro
+
+actor Administrador
+actor Bibliotecario
+note over Administrador, Bibliotecario: El Bibliotecario hereda del Administrador
+
+participant Sistema
+
+group Iniciar sesión
+    Administrador->Sistema: Ingresar credenciales(usuario, contraseña)
+   
+    group Credenciales válidas
+        note over Sistema: Credenciales válidas
+    else Credenciales incorrectas
+        note over Sistema: Credenciales incorrectas
+        Sistema->Administrador: Informar credenciales incorrectas
+        
+    end
+end
+
+Administrador->Sistema: Acceder a opción "Actualizar libro"
+Sistema->Administrador: Ingresar criterios de búsqueda(titulo, autor, ISBN)
+Sistema->Sistema: Buscar libros(criteriosBúsqueda)
+group Libros encontrados
+    note over Sistema: Libros encontrados
+    Sistema->Administrador: Mostrar lista de resultados
+    Administrador->Sistema: Seleccionar libro(IDLibro)
+    Sistema->Sistema: Obtener información del libro(IDLibro)
+    Sistema->Administrador: Mostrar información del libro
+    Administrador->Sistema: Confirmar selección del libro
+    group Confirmar
+        note over Sistema: Confirmar
+        Sistema->Administrador: Mostrar formulario de actualización
+        Administrador->Sistema: Modificar datos del libro
+        Administrador->Sistema: Verificar datos modificados
+        group Datos válidos
+            note over Sistema: Datos válidos
+            Sistema->Sistema: Actualizar libro(IDLibro, datosModificados)
+            Sistema->Administrador: Mostrar mensaje de confirmación("Libro actualizado")
+        else
+            note over Sistema: Datos inválidos
+            Sistema->Administrador: Mostrar mensaje de error("Datos inválidos")
+            Administrador->Sistema: Corregir datos del libro
+        end
+    else
+        note over Sistema: Cancelar
+        Administrador->Sistema: Cancelar actualización
+    end
+else Libro no encontrado
+    note over Sistema: Libro no encontrado
+    Sistema->Administrador: Mostrar mensaje("Libro no encontrado")
+end
+@enduml

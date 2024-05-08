@@ -1,0 +1,38 @@
+@startuml
+title caso de uso: Devolver libro
+
+actor "Lector" as U
+actor "Bibliotecario" as B
+participant "sistema" as S
+database "base de datos" as BD
+-->>S: SesionIniciada()
+activate S
+B -> S: presiona boton devolver libro
+S->S: DevolverLibro()
+activate S
+S->B: muestra formulario
+B->S : ingresa datos y presiona boton continuar
+S->BD: busca libro
+BD->S: libro encontrado
+S->S : confirma los datos
+group verificacion
+S->S: verifica si el lector es acreedor a una sanccion
+S->B:muestra los datos del libro y del lector que lo devuelve
+else fecha limite vencida
+S->S: verifica si el libro se devolvio en la fecha limite
+S->S: sancciona al lector
+S->B: muestra mensaje de sanccion
+S-> S:el proceso continua
+end
+S->B: pide la confirmacion de la devolucion mediante dos botones(realizar devoluicion, cancelar)
+B->S: confirma la devolucion 
+S->BD: actualiza la base de datos
+activate BD
+BD->S: actualizacion exitosa
+S->B: muestra mensaje de exito
+deactivate BD
+deactivate S
+-->>BD: los datos del libro devuelto se actualizan en la base de datos
+-->>BD:el libro se marca como disponible
+
+@enduml

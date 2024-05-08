@@ -1,0 +1,32 @@
+@startuml
+
+
+title "Prestar un libro"
+
+actor Lector
+actor Bibliotecario
+participant "Sistema" as  Sistema
+
+Lector -> Bibliotecario: Solicitar préstamo
+Bibliotecario -> Sistema: Verificar identidad
+Sistema --> Bibliotecario: Resultado verificación
+group Sanciones
+    note over Bibliotecario, Lector: Sanciones pendientes
+    Bibliotecario --> Lector: Informar sanciones pendientes
+else
+    note over Bibliotecario, Lector: No hay sanciones pendientes
+    Bibliotecario -> Lector: Indicar identificador libro
+    Lector -> Bibliotecario: Indicar identificador libro
+    Bibliotecario -> Sistema: Verificar disponibilidad libro
+    Sistema --> Bibliotecario: Resultado disponibilidad libro
+    group Libro disponible
+        note over Bibliotecario, Lector: Libro no disponible
+        Bibliotecario --> Lector: Informar libro no disponible
+    else
+        note over Bibliotecario, Lector: Libro disponible
+        Bibliotecario -> Sistema: Registrar préstamo
+        Sistema --> Bibliotecario: Confirmar préstamo
+        Bibliotecario --> Lector: Entregar libro y recibo
+    end
+end
+@enduml

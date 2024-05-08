@@ -1,0 +1,48 @@
+@startuml
+title caso de uso: Actualizar libro
+
+actor "usuario" as u
+participant "sistema" as s
+database "base de datos" as db
+
+u -->> s: sesionIniciada()
+activate s
+s->s: verificar el tipo de usuario
+note left of s
+  si es administrador o bibliotecario
+  se le muestra la opcion de actualizar
+
+end note
+u->s: buscar libro
+s->db: buscar libro
+activate db
+db->s: libro encontrado
+deactivate db
+s->u: mostrar datos del libro
+u-->>s: ActualizarLibro()
+activate s
+u->s: presiona boton actualizar datos de libro
+
+group Actualizar libro
+s->u: mostrar formulario de actualizacion con los datos del libro
+u->s: modifica los datos del libro
+u->s: presiona boton guardar
+else campos vacios
+s->u: mostrar mensaje de error
+s->u: vuelve a mostrar formulario
+s->u: pide que llene los campos
+
+end
+s->db: actualizar libro
+activate db
+db->s: libro actualizado
+deactivate db
+s->u: mostrar mensaje de exito
+u<-s: la ventana cierra despues de 3 segundos
+deactivate s
+s->u: vuelve a la pagina de busqueda
+
+
+
+
+@enduml

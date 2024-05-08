@@ -1,0 +1,25 @@
+@startuml
+title caso de uso: disponibilidad de libros
+
+actor "Usuario" as U
+
+participant "sistema" as S
+database "base de datos" as BD
+U-->>S: sesionIniciada()
+activate S
+U-->>S: presiona el boton de ver disponibilidad del libro
+-->>S: disponibilidadLibro()
+activate S
+S-->>BD: Select * from libros
+activate BD
+BD-->>S: lista de libros
+deactivate BD
+S-->>S: verifica el estado de los libro
+S-->>U: muestra el numero de libros disponibles
+S-->>U: muestra los libros disponibles
+S-->>U: muestra el boton de aceptar
+U->>S: presiona el boton de aceptar
+S->>S: cierra la ventana
+deactivate S 
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title caso de uso: Ver historial de prestamos
+actor "usuario" as u
+participant "sistema" as s
+database "base de datos" as bd
+->s: SesionIniciada()
+activate s
+ note left of s:El usuario debe haber pedido libros al menos una vez.
+ u->s: VerhistoriaPrestamos()
+activate s
+
+group Tipo de usuario
+     s->s:VerificarTipoUsuario()
+    activate s
+   
+    deactivate s
+    group administrador
+        u->s:el usuario seleciona ver historial de prestamos
+        s->bd:buscarHistorialPrestamos()
+        
+        activate bd
+        note left of bd:buscar en la base de datos los prestamos realizados de tosdos los usuarios
+        bd->s:historial de prestamos
+        deactivate bd
+        
+        s->u:muestra en pantalla el historial de prestamos
+        note left of s:El usuario puede desplazarse por los registros mediante el scroll del mouse.
+    end
+    group lector
+    u->s:el usuario seleciona ver historial de prestamos
+        s->bd:buscarHistorialPrestamos()
+    
+        activate bd
+        note left of bd:buscar en la base de datos los prestamos realizados del usuario
+        bd->s:historial de prestamos
+        deactivate bd
+    
+        s->u:muestra en pantalla el historial de prestamos
+        note left of s:El usuario puede desplazarse por los registros mediante el scroll del mouse.
+    end
+    end
+deactivate s
+
+
+
+
+@enduml

@@ -1,0 +1,60 @@
+@startuml
+title Ver información de un usuario
+
+actor "Usuario" as Lector
+actor Bibliotecario
+actor Administrador
+participant Sistema
+database "Base de datos"
+
+Lector->Sistema: Solicitar información de usuario(ID)
+group Identificador válido
+    note over Sistema: Identificador válido
+    Sistema->"Base de datos": Buscar usuario(ID)
+    group Usuario encontrado
+        note over Sistema: Usuario encontrado
+        Sistema->Administrador: Mostrar información completa(usuario)
+        Administrador->Lector: Visualizar información completa(usuario)
+    else Usuario no encontrado
+        note over Sistema: Usuario no encontrado
+        Sistema->Lector: Informar usuario no encontrado(ID)
+    end
+else Identificador inválido
+    note over Sistema: Identificador inválido
+    Sistema->Lector: Informar identificador inválido(ID)
+end
+
+Bibliotecario->Sistema: Solicitar información de usuario(ID)
+group Identificador válido
+    note over Sistema: Identificador válido
+    Sistema->"Base de datos": Buscar usuario(ID)
+    group Usuario encontrado
+        note over Sistema: Usuario encontrado
+        Sistema->Bibliotecario: Mostrar información parcial(usuario)
+        Bibliotecario->Lector: Visualizar información parcial(usuario)
+    else Usuario no encontrado
+        note over Sistema: Usuario no encontrado
+        Sistema->Bibliotecario: Informar usuario no encontrado(ID)
+    end
+else Identificador inválido
+    note over Sistema: Identificador inválido
+    Sistema->Bibliotecario: Informar identificador inválido(ID)
+end
+
+Administrador->Sistema: Solicitar información de usuario(ID)
+group Identificador válido
+    note over Sistema: Identificador válido
+    Sistema->"Base de datos": Buscar usuario(ID)
+    group Usuario encontrado
+        note over Sistema: Usuario encontrado
+        Sistema->Administrador: Mostrar información completa(usuario)
+        Administrador->Lector: Visualizar información completa(usuario)
+    else Usuario no encontrado
+        note over Sistema: Usuario no encontrado
+        Sistema->Administrador: Informar usuario no encontrado(ID)
+    end
+else Identificador inválido
+    note over Sistema: Identificador inválido
+    Sistema->Administrador: Informar identificador inválido(ID)
+end
+@enduml

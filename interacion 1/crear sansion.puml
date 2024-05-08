@@ -1,0 +1,45 @@
+@startuml
+title Diagrama de secuencia: Crear Sanción
+
+actor Administrador
+actor Bibliotecario
+participant Sistema
+
+group Identificación de lector
+    Administrador->Sistema: Identificar lector con libro excedido
+    Bibliotecario->Sistema: Identificar lector con libro excedido
+    Sistema->Administrador: Mostrar información de lector y libro excedido
+    Sistema->Bibliotecario: Mostrar información de lector y libro excedido
+end
+
+Administrador->Sistema: Iniciar sesión
+Bibliotecario->Sistema: Iniciar sesión
+Sistema->Administrador: Verificar credenciales
+Sistema->Bibliotecario: Verificar credenciales
+group Credenciales válidas
+    note over Sistema: Credenciales válidas
+else Credenciales inválidas
+    note over Sistema: Credenciales inválidas
+    Sistema->Administrador: Mostrar mensaje de error("Credenciales inválidas")
+    Sistema->Bibliotecario: Mostrar mensaje de error("Credenciales inválidas")
+    Administrador->Sistema: (Opcional) Reingresar credenciales
+    Bibliotecario->Sistema: (Opcional) Reingresar credenciales
+end
+
+Administrador->Sistema: Seleccionar opción "Aplicar sanción a lector"
+Bibliotecario->Sistema: Seleccionar opción "Aplicar sanción a lector"
+Sistema->Administrador: Mostrar lista de lectores
+Sistema->Bibliotecario: Mostrar lista de lectores
+Administrador->Sistema: Seleccionar lector infractor
+Bibliotecario->Sistema: Seleccionar lector infractor
+Sistema->Administrador: Mostrar información del lector y libro excedido
+Sistema->Bibliotecario: Mostrar información del lector y libro excedido
+Administrador->Sistema: Seleccionar tipo de sanción
+Bibliotecario->Sistema: Seleccionar tipo de sanción
+Sistema->Administrador: Registrar sanción en la base de datos
+Sistema->Bibliotecario: Registrar sanción en la base de datos
+Sistema->Administrador: Actualizar estado del préstamo y del usuario
+Sistema->Bibliotecario: Actualizar estado del préstamo y del usuario
+Sistema->Administrador: Generar registro de aplicación de sanción
+Sistema->Bibliotecario: Generar registro de aplicación de sanción
+@enduml

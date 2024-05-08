@@ -1,0 +1,32 @@
+@startuml
+title Iniciar y cerrar sesión
+
+actor "Administrador, Bibliotecario, Lector" as Administrador
+
+participant Sistema
+
+group Inicio de aplicación
+    Administrador->Sistema: Iniciar aplicación
+    Sistema->Administrador: Mostrar interfaz de inicio de sesión
+end
+
+Administrador->Sistema: Ingresar correo electrónico
+Administrador->Sistema: Ingresar contraseña
+Administrador->Sistema: Solicitar inicio de sesión
+Sistema->Sistema: Validar credenciales(correo electrónico, contraseña)
+group Credenciales válidas
+    note over Sistema: Credenciales válidas
+    Sistema->Administrador: Registrar inicio de sesión
+    Sistema->Administrador: Mostrar mensaje de bienvenida
+    Sistema->Administrador: Presentar opciones según rol
+    Administrador->Sistema: (Opcional) Realizar acciones en el sistema
+    Administrador->Sistema: Solicitar cierre de sesión
+    Sistema->Administrador: Registrar cierre de sesión
+    Sistema->Administrador: Mostrar mensaje de confirmación
+    Sistema->Administrador: Redirigir a interfaz de inicio de sesión
+else Credenciales inválidas
+    note over Sistema: Credenciales inválidas
+    Sistema->Administrador: Mostrar mensaje de error("Credenciales inválidas")
+    Administrador->Sistema: (Opcional) Reingresar credenciales
+end
+@enduml

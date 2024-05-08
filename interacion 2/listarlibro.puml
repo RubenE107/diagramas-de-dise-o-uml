@@ -1,0 +1,26 @@
+@startuml
+title caso de uso: listar libros
+
+actor "usuario" as u
+participant "sistema" as s
+database "base de datos" as db
+
+u -->> s: sesionIniciada()
+activate s
+u -> s: presiona el boton de listar todos los libros
+ ->s: listarLibros()
+ activate s
+s -> db: select * from libros
+activate db
+db -->> s: lista de libros
+deactivate db
+s -> s: abre la ventana y muestra los libros
+deactivate s
+note right of s
+El usuario puede ver los libros y navegar
+con el scroll del mouse
+end note
+s -->> u: muestra todos los libros
+
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+title Diagrama de secuencia: Renovar préstamo
+
+actor Bibliotecario
+actor Lector
+participant Sistema
+
+Lector->Bibliotecario: Solicitar renovación de préstamo
+Bibliotecario->Lector: Ingresar identificador de lector
+Lector->Bibliotecario: Ingresar identificador de lector
+Bibliotecario->Sistema: Verificar identificador de lector(identificadorLector)
+group Identificador válido
+    note over Sistema: Identificador válido
+else Identificador inválido
+    note over Sistema: Identificador inválido
+    Sistema->Bibliotecario: Mostrar mensaje("Identificador inválido")
+    Bibliotecario->Lector: Reingresar identificador de lector
+end
+
+Bibliotecario->Sistema: Verificar sanciones de lector(identificadorLector)
+group Sanciones pendientes
+    note over Sistema: Sanciones pendientes
+    Sistema->Bibliotecario: Mostrar mensaje("Lector con sanciones pendientes")
+    Bibliotecario->Lector: Informar sobre sanciones pendientes
+else Sin sanciones
+    note over Sistema: Sin sanciones
+end
+
+Bibliotecario->Lector: Escanear código de barras o ingresar ISBN del libro
+Bibliotecario->Sistema: Verificar libro(ISBN)
+group Libro válido
+    note over Sistema: Libro válido
+    Sistema->Bibliotecario: Confirmar renovación de préstamo
+    Bibliotecario->Lector: Informar sobre la renovación exitosa del préstamo
+else Libro inválido
+    note over Sistema: Libro inválido
+    Sistema->Bibliotecario: Mostrar mensaje("Libro inválido")
+    Bibliotecario->Lector: Informar sobre el error en la renovación del préstamo
+end
+@enduml

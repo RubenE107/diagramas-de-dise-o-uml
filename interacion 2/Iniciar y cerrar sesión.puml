@@ -1,0 +1,59 @@
+@startuml
+title caso de uso: Iniciar sesión y cerrar sesión
+actor "usuario" as U
+participant "Sistema" as s
+database "Base de datos" as BD
+activate s
+->s:iniciarSesion()
+U -> s: Ingresar al sistema
+s->U: Pantalla de inicio
+s->U: pidale al usuario que ingrese su usuario y contraseña
+U->s: Ingresar usuario y contraseña
+
+
+s->BD: validar usuario y contraseña
+ activate s 
+activate BD
+group validar usuario y contraseña
+  
+    group usuario y contraseña invalidos
+        group datos incorrectos
+            s->U: mensaje de error
+            s->U: El sistema le indica al usuario ingresar un correo electrónico y una contraseña asociadas a una cuenta.
+
+        end
+        group credenciales invalidos
+            s->U: mensaje de error
+            s->U: Informa al usuario que sus credenciales no son válidas y le pide intentar el proceso de nuevo.       
+        end
+    end
+      group usuario y contraseña validos
+    
+    BD->s: usuario y contraseña validos
+
+    end
+
+end
+
+deactivate BD
+
+
+  note left: El usuario puede usar el sistema
+  
+deactivate s
+note right of U: el usuario termina de usar el sistema
+
+U->s: solicitar cerrar sesion
+U-->>s: cerrarSesion()
+activate s
+s->s: borrar las credenciales del usuario
+s->U: mensaje de confimacion de cierre de sesion
+s->U: pantalla de inicio
+deactivate s
+note right of U: el usuario cierra la sesion
+
+deactivate s
+
+
+
+@enduml

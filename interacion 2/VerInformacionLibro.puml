@@ -1,0 +1,27 @@
+@startuml
+title caso de uso: ver informacion de un libro
+
+actor "usuario" as u
+participant "sistema" as s
+database "base de datos" as db
+
+u -->> s: sesionIniciada()
+activate s
+u -> s: buscarLibro()
+s -> db: obtenerLibro(id)
+activate db
+db -->> s: libro encontrado
+deactivate db
+u -> s: verInformacionLibro(libro)
+activate s
+u -> s: presiona boton de ver informacion del libro encontrado
+s->s: mostrar informacion del libro en un ventana
+u -> s: presiona boton de cerrar ventana al terminar de ver la informacion
+s -> s: cerrar ventana
+
+deactivate s
+
+
+
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+title caso de uso: listar usuarios
+ actor "Administrador" as u
+participant "sistema" as s
+database "Base de datos" as DB
+-->>s: Sesioniniciada()
+activate s
+-->>s: listarUsuarios()
+activate s
+u->>s: El usuario da click en el menu de la aplicacion
+u->>s: El usuario da click en la opcion usuarios
+
+s->>DB: SELECT * FROM usuarios
+activate DB
+DB->>s: Lista de usuarios
+deactivate DB
+s->>u: El sistema abre ventana y despliega la lista de usuarios
+
+    note right of u: El administrador navegar usando la scrull del mouse
+
+deactivate s
+
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+title Diagrama de secuencia: Ver sanción
+
+actor Lector
+participant Sistema
+database BaseDatos
+
+Lector->Sistema: Solicitar ver sanciones
+Sistema->BaseDatos: Consultar sanciones del lector
+group Sanciones encontradas
+    note over Sistema: Sanciones encontradas
+    Sistema->Lector: Mostrar lista de sanciones
+    Lector->Sistema: (Opcional) Seleccionar sanción
+    Sistema->BaseDatos: Obtener detalles de la sanción
+    BaseDatos->Sistema: Devolver detalles de la sanción
+    Sistema->Lector: Mostrar detalles de la sanción
+else No hay sanciones pendientes
+    note over Sistema: No hay sanciones pendientes
+    Sistema->Lector: Mostrar mensaje("No hay sanciones pendientes")
+end
+@enduml

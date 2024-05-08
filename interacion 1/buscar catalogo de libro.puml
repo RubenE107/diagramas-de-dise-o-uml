@@ -1,0 +1,23 @@
+@startuml
+title Diagrama de secuencia: Buscar en el catálogo de libros
+
+actor "Usuario, Administrador, Bibliotecario" as Lector
+
+participant Sistema
+database BaseDatos
+
+Lector->Sistema: Acceder a la interfaz de búsqueda
+Sistema->Lector: Mostrar interfaz de búsqueda
+Lector->Sistema: Ingresar criterios de búsqueda
+Sistema->BaseDatos: Consultar catálogo de libros
+BaseDatos->Sistema: Devolver resultados de búsqueda
+Sistema->Lector: Mostrar resultados de búsqueda
+
+group Navegación de resultados
+    Lector->Sistema: (Opcional) Seleccionar libro
+    Sistema->BaseDatos: Obtener información del libro
+    BaseDatos->Sistema: Devolver información del libro
+    Sistema->Lector: Mostrar información del libro
+    Lector->Sistema: (Opcional) Navegar a otra página
+end
+@enduml

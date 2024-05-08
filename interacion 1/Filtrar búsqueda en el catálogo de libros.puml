@@ -1,0 +1,25 @@
+@startuml
+title Filtrar búsqueda en el catálogo de libros
+
+actor "Usuario, Bibliotecario, Administrador" as Lector
+participant Sistema
+database BaseDatos
+
+Lector->Sistema: Realizar búsqueda inicial
+Sistema->BaseDatos: Consultar catálogo de libros
+BaseDatos->Sistema: Devolver resultados de búsqueda
+Lector->Sistema: Seleccionar opción "Filtrar"
+Sistema->Lector: Mostrar opciones de filtrado
+Lector->Sistema: Seleccionar criterios de filtrado
+Sistema->BaseDatos: Aplicar criterios de filtrado
+BaseDatos->Sistema: Devolver resultados filtrados
+Sistema->Lector: Mostrar resultados filtrados
+
+group Navegación de resultados
+    Lector->Sistema: (Opcional) Seleccionar libro
+    Sistema->BaseDatos: Obtener información del libro
+    BaseDatos->Sistema: Devolver información del libro
+    Sistema->Lector: Mostrar información del libro
+    Lector->Sistema: (Opcional) Navegar a otra página
+end
+@enduml

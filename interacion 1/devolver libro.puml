@@ -1,0 +1,48 @@
+@startuml
+title Devolver libro
+
+actor Bibliotecario
+actor Lector
+participant Sistema
+
+Lector->Bibliotecario: Solicitar devolución de libro
+Bibliotecario->Lector: Ingresar identificador de lector
+Lector->Bibliotecario: Ingresar identificador de lector
+Bibliotecario->Sistema: Verificar identificador de lector(identificadorLector)
+group Identificador válido
+    note over Sistema: Identificador válido
+else Identificador inválido
+    note over Sistema: Identificador inválido
+    Sistema->Bibliotecario: Mostrar mensaje("Identificador inválido")
+    Bibliotecario->Lector: Reingresar identificador de lector
+end
+
+Bibliotecario->Sistema: Verificar sanciones de lector(identificadorLector)
+group Sanciones pendientes
+    note over Sistema: Sanciones pendientes
+    Sistema->Bibliotecario: Mostrar mensaje("Lector con sanciones pendientes")
+    Bibliotecario->Lector: Informar sobre sanciones pendientes
+else Sin sanciones
+    note over Sistema: Sin sanciones
+end
+
+Bibliotecario->Lector: Escanear código de barras o ingresar ISBN del libro
+Bibliotecario->Sistema: Verificar préstamo del libro(identificadorLector, ISBN)
+group Libro prestado
+    note over Sistema: Libro prestado
+    Bibliotecario->Sistema: Registrar devolución del libro(identificadorLector, ISBN)
+    group Devolución exitosa
+        note over Sistema: Devolución exitosa
+        Sistema->Bibliotecario: Confirmar devolución del libro
+        Bibliotecario->Lector: Informar sobre la devolución exitosa del libro
+    else Devolución fallida
+        note over Sistema: Devolución fallida
+        Sistema->Bibliotecario: Mostrar mensaje("Error en la devolución del libro")
+        Bibliotecario->Lector: Informar sobre el error en la devolución del libro
+    end
+else Libro no prestado
+    note over Sistema: Libro no prestado
+    Sistema->Bibliotecario: Mostrar mensaje("Libro no prestado por el lector")
+    Bibliotecario->Lector: Informar sobre el error en la devolución del libro
+end
+@enduml

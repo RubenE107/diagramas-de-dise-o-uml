@@ -1,0 +1,31 @@
+@startuml
+title Actualizar sanción
+
+actor "Bibliotecario, Administrador" as  Administrador
+participant Sistema
+database BaseDatos
+
+Administrador->Sistema: Solicitar listar sanciones
+Sistema->BaseDatos: Consultar usuarios sancionados
+group Usuarios sancionados encontrados
+    note over Sistema: Usuarios sancionados encontrados
+    Sistema->Administrador: Mostrar lista de usuarios sancionados
+    Administrador->Sistema: Seleccionar usuario
+    Sistema->BaseDatos: Obtener detalles de la sanción del usuario
+    BaseDatos->Sistema: Devolver detalles de la sanción
+    Sistema->Administrador: Mostrar detalles de la sanción del usuario
+    Administrador->Sistema: Seleccionar sanción a modificar
+    Sistema->BaseDatos: Obtener información de la sanción específica
+    BaseDatos->Sistema: Devolver información de la sanción
+    Sistema->Administrador: Mostrar formulario de actualización
+    Administrador->Sistema: Ingresar datos de la modificación
+    Sistema->BaseDatos: Validar datos ingresados
+    group Datos válidos
+        note over Sistema: Datos válidos
+    else Datos inválidos
+        note over Sistema: Datos inválidos
+        Sistema->Administrador: Mostrar mensaje de error("Datos inválidos")
+        Administrador->Sistema: (Opcional) Reingresar datos
+    end
+end
+@enduml

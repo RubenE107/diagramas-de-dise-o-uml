@@ -1,0 +1,42 @@
+@startuml
+title Actualizar Usuario
+
+actor Administrador
+participant Sistema
+
+group Iniciar sesión
+    Administrador->Sistema: Ingresar credenciales(usuario, contraseña)
+    group Credenciales válidas
+        note over Sistema: Credenciales válidas
+    else Credenciales incorrectas
+        note over Sistema: Credenciales incorrectas
+        Sistema->Administrador: Informar credenciales incorrectas
+    end
+end
+
+Administrador->Sistema: Solicitar modificar usuario
+Sistema->Administrador: Ingresar datos de usuario(nombre, apellido, etc.)
+Administrador->Sistema: Confirmar datos de búsqueda
+Sistema->Sistema: Buscar usuario(datosUsuario)
+group Usuario encontrado
+    note over Sistema: Usuario encontrado
+    Sistema->Administrador: Mostrar información de usuario
+    Administrador->Sistema: Modificar datos de usuario
+    Administrador->Sistema: Confirmar cambios
+    Sistema->Sistema: Validar campos de usuario(datosModificados)
+    group campo llenados correctamente
+        note over Sistema: campos válidos
+        Sistema->Sistema: Actualizar usuario(datosUsuario, datosModificados)
+        Sistema->Administrador: Mostrar mensaje de confirmación("Usuario actualizado")
+    else
+        note over Sistema: campos sin llenar
+        Sistema->Administrador: Mostrar mensaje de error("campos sin llenar")
+        Administrador->Sistema: llenar los campos faltantes
+    end
+else Usuario no encontrado
+    note over Sistema: Usuario no encontrado
+    Sistema->Administrador: Mostrar mensaje("Usuario no encontrado")
+    Sistema->Administrador: Solicitar ingresar datos de usuario
+    Administrador->Sistema: Ingresar datos de usuario(nombre, apellido, etc.)
+end
+@enduml

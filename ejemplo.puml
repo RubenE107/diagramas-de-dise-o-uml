@@ -1,0 +1,52 @@
+@startuml
+
+class Lector {
+  - solicitarPrestamo()
+  - solicitarRegistro()
+  - renovarPrestamo()
+  - devolverLibro()
+}
+
+class Administrador {
+  - CrudUsuarios()
+  - CrudLibros()
+}
+
+class Bibliotecario {
+  - CrudLibros()
+}
+
+class Registro {
+  - finalizarPrestamo()
+  - realizarPrestamo()
+  - extenderPrestamo()
+  - reservarLibro()
+}
+
+class CatalogoDeLibros {
+  - obtenerCopia()
+}
+
+class Prestamo {
+  - sancionar()
+}
+
+Lector "1" *--* "1" Prestamo
+note right of Lector: El lector puede tener un préstamo
+
+Bibliotecario *--* CatalogoDeLibros
+note left of Bibliotecario: El bibliotecario puede acceder al catálogo de libros
+
+Administrador *-- Lector
+note top of Administrador: El administrador puede gestionar a los lectores
+
+Administrador *-- Bibliotecario
+note top of Administrador: El administrador puede gestionar a los bibliotecarios
+
+Administrador *-- Registro
+note top of Administrador: El administrador puede gestionar los registros
+
+Registro *--* Prestamo
+note left of Registro: El registro puede tener varios préstamos
+
+@enduml

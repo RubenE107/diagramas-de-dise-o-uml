@@ -1,0 +1,20 @@
+@startuml
+title Crear un usuario
+
+actor "Usuario,Bibliotecario,Administrador" as Lector
+participant "Sistema" as Sistema
+
+Lector->Sistema: Solicitar creación de usuario
+Sistema->Lector: Ingresar información de usuario(nombre, apellidos, correo, tipoUsuario, contraseña)
+Lector->Sistema: Enviar información de usuario(nombre, apellidos, correo, tipoUsuario, contraseña)
+Sistema->Sistema: Verificar duplicidad de correo(correo)
+group Correo ya registrado
+    note over Sistema: Correo ya registrado
+    Sistema->Lector: Informar correo duplicado
+else Correo no registrado
+    note over Sistema: Correo no registrado
+    Sistema->Sistema: Registrar usuario(nombre, apellidos, correo, tipoUsuario, contraseña)
+    Sistema->Lector: Informar usuario creado(nombre, contraseñaTemporal)
+    Sistema->Lector: Lo redirige a la página de inicio de sesión
+end
+@enduml

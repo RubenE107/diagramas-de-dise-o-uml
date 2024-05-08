@@ -1,0 +1,30 @@
+@startuml
+title Crear Libro
+
+actor "Administrador, Bibliotecario, Sistema " as Administrador
+
+group Iniciar sesión
+    Administrador->Sistema: Ingresar credenciales(usuario, contraseña)
+    group Credenciales válidas
+        note over Sistema: Credenciales válidas
+        Administrador->Sistema: Acceder a opción "Registrar libro"
+        Sistema->Administrador: Mostrar formulario de registro de libro
+        Administrador->Sistema: Ingresar datos del libro(titulo, autor, ISBN, editorial, fechaPublicacion, genero, descripcion)
+        Sistema->Sistema: Validar campos del formulario(campos obligatorios, formato, etc.)
+        group Campos llenados correctamente
+            note over Sistema: Campos llenados correctamente
+            Sistema->Sistema: Registrar libro(titulo, autor, ISBN, editorial, fechaPublicacion, genero, descripcion)
+            Sistema->Administrador: Mostrar mensaje de éxito("Libro creado")
+        else Hay campos vacios
+            note over Sistema: Campos vacíos
+            Sistema->Administrador: Mostrar mensaje de error("Hay campos vacios")
+            Administrador->Sistema: llenar campos faltantes
+        end
+    else Credenciales incorrectas
+        note over Sistema: Credenciales incorrectas
+        Sistema->Administrador: mensaje de error("Error al iniciar sesión")
+    end
+end
+
+
+@enduml
