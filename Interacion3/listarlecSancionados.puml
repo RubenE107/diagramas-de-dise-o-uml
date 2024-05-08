@@ -1,5 +1,5 @@
 @startuml
-title Diagrama de secuencia listar lectores sancionados
+
 actor "usuario" as u
 participant "sistema" as s
 database "base de datos" as db  

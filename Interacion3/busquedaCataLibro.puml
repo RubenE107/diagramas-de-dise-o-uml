@@ -1,0 +1,27 @@
+@startuml
+actor "usuario" as u
+participant "sistema" as s
+database "base de datos" as bd
+
+u->s:iniciarSesion(correo,contraseña)
+activate s
+u->s:el usuario da click al cuadro de busqueda
+group buscar por titulo
+u->s:ingresa el titulo del libro
+
+s->bd:buscarLibro(titulo)
+activate bd
+deactivate bd
+s->s: los ordena en forma de lista
+s->u:muestra los libros
+else no ingresa titulo
+ s->s:listarLibros()
+ activate s
+ deactivate s
+else no encuetra libro
+s->u:mensaje("no se encontro libro")
+end
+
+
+
+@enduml

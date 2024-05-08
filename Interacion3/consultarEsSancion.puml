@@ -1,5 +1,5 @@
 @startuml
-title caso de uso: Consultar el estado de la sanción de un lector
+
 actor "usuario" as u
 participant "sistema" as s  
 database "base de datos" as bd

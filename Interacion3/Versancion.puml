@@ -1,0 +1,22 @@
+@startuml
+
+actor "usuario" as u
+participant "sistema" as s
+
+u -> s:iniciarSession(correo,contraseña)
+activate s
+u -> s:verusuario(idUsuario)
+activate s
+u -> s:pulsa el boton ver Sancion
+s -> s:verifca si el usuario tiene sancion
+group no tiene sancion
+s -> u: mensaje("no tiene sancion")
+end
+s->s: despliega la informacion de la sancion
+s -> u: muestra la informacion de la sancion
+u -> s:cerrar la ventana al terminar
+
+
+deactivate s
+
+@enduml

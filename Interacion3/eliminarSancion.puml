@@ -1,5 +1,5 @@
 @startuml
-title caso de uso eliminar sancion
+
 
 actor "usuario" as u
 participant "sistema" as s

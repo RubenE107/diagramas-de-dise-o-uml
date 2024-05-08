@@ -1,0 +1,30 @@
+@startuml
+
+actor "usuario" as u
+participant "sistema" as s
+database "base de datos" as db
+
+u -> s:iniciarSesion(correo,contraseña)
+activate s
+s ->u:presiona el boton de  filtrar libros
+u -> s:filtrarLibros(autor,categoria)
+activate s
+s -> u:muestra una ventana dinde muestra dos lista categorias y autores
+u -> s:selecciona una opcion
+s-> u:selecciona una opcion de realizar busqueda o cancelar
+group realizar busqueda
+
+u -> s:selecciona los filtros
+s -> s:presiona el boton de buscar
+s -> db:realiza la consulta
+activate db
+deactivate db
+group mostrar resultados
+s -> u:muestra los resultados
+else no encuentra resultados
+s -> u:muestra un mensaje de que no se encontraron resultados
+end
+else cancelar
+s->s:cieera la ventana
+end
+@enduml
