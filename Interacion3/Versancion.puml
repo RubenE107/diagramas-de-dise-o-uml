@@ -1,20 +1,27 @@
 @startuml
 
-actor "usuario" as u
-participant "sistema" as s
+actor ":prestamo" as p
+database "base de datos" as db
 
-u -> s:iniciarSession(correo,contraseña)
-activate s
-u -> s:verusuario(idUsuario)
-activate s
-u -> s:pulsa el boton ver Sancion
-s -> s:verifca si el usuario tiene sancion
-group no tiene sancion
-s -> u: mensaje("no tiene sancion")
-end
-s->s: despliega la informacion de la sancion
-s -> u: muestra la informacion de la sancion
-u -> s:cerrar la ventana al terminar
+->p:ver_sancion(id_usuario)
+activate p
+p->db:get_sancion(id_usuario)
+activate db
+deactivate db
+
+deactivate p
+' u -> s:iniciarSession(correo,contraseña)
+' activate s
+' u -> s:verusuario(idUsuario)
+' activate s
+' u -> s:pulsa el boton ver Sancion
+' s -> s:verifca si el usuario tiene sancion
+' group no tiene sancion
+' s -> u: mensaje("no tiene sancion")
+' end
+' s->s: despliega la informacion de la sancion
+' s -> u: muestra la informacion de la sancion
+' u -> s:cerrar la ventana al terminar
 
 
 deactivate s
