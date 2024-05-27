@@ -27,6 +27,7 @@ else
     deactivate bd
     r->b:msj5("Préstamo renovado con éxito")
     b->L:msj6("Préstamo renovado con éxito")
+    
 end
 deactivate r
 

@@ -1,58 +1,95 @@
+' @startuml
+' title caso de uso: Prestar libro
+
+
+' actor "Bibliotecario" as B
+' participant "sistema" as S
+' database "base de datos" as BD
+' -->>S: SesionIniciada()
+' activate S
+' B -> S: presiona el boton "prestar libro"
+' B -->> S: PrestarLibro()
+' activate S
+' S -> S : muestra la ventana de prestamo
+' S -> B: solicita isbn del libro
+' B -> S: ingresa el isbn del libro
+' S ->B: solicita el usuario al que se prestara el libro
+' B -> S: ingresa el usuario
+' S-> B: solicita la fecha de entrega y prestamo
+' B -> S: ingresa la fecha de entrega y prestamo
+' B -> S: presiona el boton "prestar"
+' S -> BD: busca el libro
+' activate BD
+' S -> BD: busca el usuario
+' BD ->S: devuelve la informacion del usuario
+' BD ->S: devuelve la informacion del libro
+' S -> S: verifica si el libro esta disponible
+' S->S: verifica si el usuario existe
+' S -> S : verifica si el usuario no tiene sanciones
+' S -> S: verifica si el usuario no tiene libros prestados
+' deactivate BD
+' S-> B:muestra en pantalla que el libro el resumen del libro y usuario
+' group prestamo
+'     S -> B: muestra en pantalla dos botones "prestar" y "cancelar"
+'     B -> S: presiona el boton "prestar"
+    
+'     else usuario sacionado
+'     S -> B: muestra en pantalla que el usuario esta sancionadoNo
+'     S ->S: cancela la operacion
+'     else indentificador del usuario invalido
+'          S -> B: muestra en pantalla que el usuario no existe
+'             S ->S:  regresa al paso de solicitar el usuario
+'             else indentificador del libro invalido
+'             S -> B: muestra en pantalla que el libro no existe
+'             S ->S:  regresa al paso de solicitar el libro
+'             else Lector con prestamos stop
+'             S->B: Se informa que no se puede realizar el prestamo
+'             S->S: cancela la operacion
+'     end
+
+' S -> BD: actualiza la base de datos
+' activate BD
+' deactivate BD
+' S->B: muestra en pantalla que el libro fue prestado y imprime el recibo
+' B -> S: entrega el libro al usuario
+' deactivate S
+' -->>BD:El prestamo queda registrado
+
+' @enduml
 @startuml
 title caso de uso: Prestar libro
 
+participant ":Lector" as l
+actor "Bibliotecario" as b
+participant "Registro" as r
+participant "Sistema" as s
+database "Base de datos" as bd
 
-actor "Bibliotecario" as B
-participant "sistema" as S
-database "base de datos" as BD
--->>S: SesionIniciada()
-activate S
-B -> S: presiona el boton "prestar libro"
-B -->> S: PrestarLibro()
-activate S
-S -> S : muestra la ventana de prestamo
-S -> B: solicita isbn del libro
-B -> S: ingresa el isbn del libro
-S ->B: solicita el usuario al que se prestara el libro
-B -> S: ingresa el usuario
-S-> B: solicita la fecha de entrega y prestamo
-B -> S: ingresa la fecha de entrega y prestamo
-B -> S: presiona el boton "prestar"
-S -> BD: busca el libro
-activate BD
-S -> BD: busca el usuario
-BD ->S: devuelve la informacion del usuario
-BD ->S: devuelve la informacion del libro
-S -> S: verifica si el libro esta disponible
-S->S: verifica si el usuario existe
-S -> S : verifica si el usuario no tiene sanciones
-S -> S: verifica si el usuario no tiene libros prestados
-deactivate BD
-S-> B:muestra en pantalla que el libro el resumen del libro y usuario
-group prestamo
-    S -> B: muestra en pantalla dos botones "prestar" y "cancelar"
-    B -> S: presiona el boton "prestar"
-    
-    else usuario sacionado
-    S -> B: muestra en pantalla que el usuario esta sancionado
-    S ->S: cancela la operacion
-    else indentificador del usuario invalido
-         S -> B: muestra en pantalla que el usuario no existe
-            S ->S:  regresa al paso de solicitar el usuario
-            else indentificador del libro invalido
-            S -> B: muestra en pantalla que el libro no existe
-            S ->S:  regresa al paso de solicitar el libro
-            else Lector con prestamos stop
-            S->B: Se informa que no se puede realizar el prestamo
-            S->S: cancela la operacion
+->l:solicitar_prestamo(id_libro, id_usuario)
+activate l
+l->b:msj1(Usuario #Nombre solicita el libro #Libro)
+b->r:detectar_sanciones(id_usuario)
+group detectar_sanciones
+    note over r: detectar_sanciones devuelve true
+    s->b: msj2("El #usuario no tiene derecho a solicitar el préstamo")
+    b->l: msj3("Sin derecho a solicitar el préstamo")
+else
+    note over r: detectar_sanciones devuelve false
+    b->r: obtener_copias_disponibles(id_libro)
+    r->bd: get_copias_disponibles(id_libro)
+    group detectar_copias_disponibles:
+        note over r: detectar_copias_disponibles devuelve = 0
+        b->r: reservar_prestamo(id_libro, id_usuario)
+        r->s: create(Reserva)
+        s->bd: insert(Reserva)
+    else
+        note over r: detectar_copias_disponibles devuelve > 0
+        b->r: realizar_prestamo(id_libro, id_usuario)
+        r->s: create(Prestamo)
+        s->bd: insert(Prestamo)
     end
+end
+activate b
 
-S -> BD: actualiza la base de datos
-activate BD
-deactivate BD
-S->B: muestra en pantalla que el libro fue prestado y imprime el recibo
-B -> S: entrega el libro al usuario
-deactivate S
--->>BD:El prestamo queda registrado
 
 @enduml
