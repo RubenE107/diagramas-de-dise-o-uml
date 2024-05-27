@@ -1,39 +1,55 @@
 @startuml
-actor "usuario" as u
+actor ":administrador" as u
 participant "sistema" as s
 database "base de datos" as db
-
-u -> s:iniciarSesion(correo,contraseña)
-activate s
-u -> s:LisarLectoresSacionados()
-activate s
-u -> s:presiona el boton listar por periodo
-s -> s: abre la ventana de seleccion de periodo usando un calendario
-s ->u: muestra la ventana de seleccion de periodo
-group seleccion de periodo
-u -> s: selecciona el periodo
-else no selecciona el periodo
-s->s:lisarLectoresSancionados()
-activate s
-deactivate s
-s->u:muestra los lectores sancionados
-else seleciona una fecha
-s->s:lisarLectoresSancionados(periodo)
-activate s
-deactivate s
-s->u:muestra los lectores sancionados
-else el sistema no encuentra lectores sancionados en el periodo seleccionado
-s->u:muestra un mensaje de que no hay lectores sancionados en el periodo seleccionado
-s->s:lisarLectoresSancionados()
-activate s
-deactivate s
-s->u:muestra los lectores sancionados
-
-end  
-s -> db: consulta los lectores sancionados en el periodo seleccionado
+->u:filtrar_sanciones_por_fecha(fecha_inicio, fecha_fin)
+activate u
+u->db:get_sancionados_por_fecha(fecha_inicio, fecha_fin)
 activate db
+group get_sancionados_por_fecha
+note over s:no hay sancionados en el periodo seleccionado
+
+    s->u:msg1("no hay sancionados en el periodo seleccionado")
+else
+    note over s:si hay sancionados en el periodo seleccionado
+
+    s->u:msg2("sancionados en el periodo seleccionado")
+
+end
 deactivate db
-s -> s: muestra los lectores sancionados en el periodo seleccionado
+deactivate u
+
+' u -> s:iniciarSesion(correo,contraseña)
+' activate s
+' u -> s:LisarLectoresSacionados()
+' activate s
+' u -> s:presiona el boton listar por periodo
+' s -> s: abre la ventana de seleccion de periodo usando un calendario
+' s ->u: muestra la ventana de seleccion de periodo
+' group seleccion de periodo
+' u -> s: selecciona el periodo
+' else no selecciona el periodo
+' s->s:lisarLectoresSancionados()
+' activate s
+' deactivate s
+' s->u:muestra los lectores sancionados
+' else seleciona una fecha
+' s->s:lisarLectoresSancionados(periodo)
+' activate s
+' deactivate s
+' s->u:muestra los lectores sancionados
+' else el sistema no encuentra lectores sancionados en el periodo seleccionado
+' s->u:muestra un mensaje de que no hay lectores sancionados en el periodo seleccionado
+' s->s:lisarLectoresSancionados()
+' activate s
+' deactivate s
+' s->u:muestra los lectores sancionados
+
+' end  
+' s -> db: consulta los lectores sancionados en el periodo seleccionado
+' activate db
+' deactivate db
+' s -> s: muestra los lectores sancionados en el periodo seleccionado
 
 
 @enduml
