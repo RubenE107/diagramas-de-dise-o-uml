@@ -1,34 +1,71 @@
 @startuml 
 
-actor "Usuario" as u
+title Diagrama de secuencia: Renovar préstamo
+
+participant ":Lector" as L
+actor "Bibliotecario" as b
+participant ":Registro" as r
 participant "Sistema" as s
 database "Base de datos" as bd
 
-u -> s: iniciarSesion(correo, contrasena)
-activate s
-u -> s: renovarPrestamo(idLibro, idUsuario)
-activate s
-u ->> s: El usuario presiona el boton Extender Periodo
-s->>s: Verificar si el usuario puede extender el periodo
-group Si el usuario puede extender el periodo
-->s: verUsuario(idUsuario)
-
-activate s
-else Si el usuario no puede extender el periodo
-    s->>s: detecta que el usuario ya tiene una sanccion
-    s--> u: mensaje("No puede extender el periodo, tiene una sancion") 
-    s->>s: Cancelar la operacion
-deactivate s
+->L:renovar_prestamo(id_libro, id_usuario)
+activate L
+L->b:msj1(usuario #Nombre solicita renovar préstamo #prestamo)
+activate b
+b->r:extender_prestamo(id_usuario)
+activate r
+r->r:detectar_sanciones(id_usuario)
+group detectar_sanciones
+    note over r: detectar_sanciones devuelve true
+    s->b: msj2("El #usuario no tiene derecho a renovar el préstamo")
+    b->L: msj3("Sin derecho a renovar el préstamo")
+else 
+    note over r: detectar_sanciones devuelve false
+    s->b: msj4("Requisitos para la extension cumplidos")
+    r->bd:actualizar_prestamo(id_prestamo, fecha_nueva)
+    activate bd
+    deactivate bd
+    r->b:msj5("Préstamo renovado con éxito")
+    b->L:msj6("Préstamo renovado con éxito")
 end
-u -> s:extenderPrestamo(idLibro)
-activate s
+deactivate r
 
-s -> bd: actualizarPrestamo(idLibro)
-activate bd
-s -->> u: Enviar mensaje de confirmacion
-deactivate bd
-deactivate s
-deactivate s
+deactivate L
+
+
+
+
+
+deactivate b
+' actor "Usuario" as u
+' participant "Sistema" as s
+' database "Base de datos" as bd
+
+' u -> s: iniciarSesion(correo, contrasena)
+' activate s
+' u -> s: renovarPrestamo(idLibro, idUsuario)
+' activate s
+' u ->> s: El usuario presiona el boton Extender Periodo
+' s->>s: Verificar si el usuario puede extender el periodo
+' group Si el usuario puede extender el periodo
+' ->s: verUsuario(idUsuario)
+
+' activate s
+' else Si el usuario no puede extender el periodo
+'     s->>s: detecta que el usuario ya tiene una sanccion
+'     s--> u: mensaje("No puede extender el periodo, tiene una sancion") 
+'     s->>s: Cancelar la operacion
+' deactivate s
+' end
+' u -> s:extenderPrestamo(idLibro)
+' activate s
+
+' s -> bd: actualizarPrestamo(idLibro)
+' activate bd
+' s -->> u: Enviar mensaje de confirmacion
+' deactivate bd
+' deactivate s
+' deactivate s
 
 
 
