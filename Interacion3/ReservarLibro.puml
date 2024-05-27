@@ -1,35 +1,55 @@
 @startuml
-actor "usuario" as u
+actor ":Lector" as L
+actor "Bibliotecario" as b 
 participant "Sistema" as s
 database "Base de datos" as db
 
-u -> s:iniciarSesion(correo,contraseña)
-activate s
-u -> s:verUsuario(idUsuario)
-activate s
-deactivate
-note right of s:verifica que el usuario exista y que no tenga prestamos sanciones
+->L:solicitar_reservacion(id_libro, id_usuario)
+activate L
+L->b:msj1(usuario #Nombre_id solicita reservar libro #informacion_libro)
+b->b:reservar_prestamo(id_libro, id_usuario)
+activate b
 
-u -> s:presiona el boton de nuevo prestamo
-s->s:reservarPrestamo(idLibro,idUsuario)
-activate s
-s->s:abrir ventana con un formulario para llenar los datos del libro
-u->s:llena los datos del libro
-s->s:abre ventana con los datos del libro y botones de confirmar, cancelar
-group confirmar
-u->s:presiona el boton de confirmar
-s->db:inserta los datos del prestamo
+b->db:insertar_reservacion(id_libro, id_usuario)
 activate db
-deactivate  db
-s->u:abre ventana con mensaje de prestamo exitoso
+deactivate db
+deactivate b
+s->b:msj2(reservacion exitosa)
+b->L:msj3(reservacion exitosa)
 
-else cancelar
-u->s:presiona el boton de cancelar
-s->s:cancela la operacion
-s->u:abre ventana con mensaje de prestamo cancelado
-s->s:cierra la ventana
-end
-deactivate  s
+
+
+
+
+deactivate L
+
+' u -> s:iniciarSesion(correo,contraseña)
+' activate s
+' u -> s:verUsuario(idUsuario)
+' activate s
+' deactivate
+' note right of s:verifica que el usuario exista y que no tenga prestamos sanciones
+
+' u -> s:presiona el boton de nuevo prestamo
+' s->s:reservarPrestamo(idLibro,idUsuario)
+' activate s
+' s->s:abrir ventana con un formulario para llenar los datos del libro
+' u->s:llena los datos del libro
+' s->s:abre ventana con los datos del libro y botones de confirmar, cancelar
+' group confirmar
+' u->s:presiona el boton de confirmar
+' s->db:inserta los datos del prestamo
+' activate db
+' deactivate  db
+' s->u:abre ventana con mensaje de prestamo exitoso
+
+' else cancelar
+' u->s:presiona el boton de cancelar
+' s->s:cancela la operacion
+' s->u:abre ventana con mensaje de prestamo cancelado
+' s->s:cierra la ventana
+' end
+' deactivate  s
 
 
 deactivate s
