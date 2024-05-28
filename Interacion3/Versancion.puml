@@ -1,13 +1,24 @@
 @startuml
-
+title caso de uso: ver sancion
 actor ":prestamo" as p
-database "base de datos" as db
+
 
 ->p:ver_sancion(id_usuario)
 activate p
 p->db:get_sancion(id_usuario)
+create ":sancion" as s
+
+db->s:create(id_usuario)
+
+database "base de datos" as db
+
+
 activate db
+s-->>p:list:[:sancion]
 deactivate db
+
+
+
 
 deactivate p
 ' u -> s:iniciarSession(correo,contraseña)
@@ -23,7 +34,5 @@ deactivate p
 ' s -> u: muestra la informacion de la sancion
 ' u -> s:cerrar la ventana al terminar
 
-
-deactivate s
 
 @enduml
