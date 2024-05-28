@@ -1,19 +1,20 @@
 @startuml
 actor ":administrador" as u
-participant "sistema" as s
 database "base de datos" as db
 ->u:filtrar_sanciones_por_fecha(fecha_inicio, fecha_fin)
 activate u
+
 u->db:get_sancionados_por_fecha(fecha_inicio, fecha_fin)
 activate db
-group get_sancionados_por_fecha
-note over s:no hay sancionados en el periodo seleccionado
-
-    s->u:msg1("no hay sancionados en el periodo seleccionado")
+group if
+note over db:no hay sancionados en el periodo seleccionado
+    u->u:msg1("no hay sancionados en el periodo seleccionado")
 else
-    note over s:si hay sancionados en el periodo seleccionado
-
-    s->u:msg2("sancionados en el periodo seleccionado")
+    note over db:si hay sancionados en el periodo seleccionado
+    create ":usuario" as a
+    db->a:create()
+    u<<--a:list:[:usuarios]
+    u->u:msg2("sancionados en el periodo seleccionado")
 
 end
 deactivate db
