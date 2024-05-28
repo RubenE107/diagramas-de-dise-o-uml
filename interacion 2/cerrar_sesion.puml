@@ -1,0 +1,8 @@
+@startuml
+participant ":usuario" as l
+
+
+l -> l: cerrar_sesion()
+
+destroy l
+@enduml
