@@ -14,39 +14,3 @@ s-> db:update_sancion(fechar_fin)
 @enduml
 
 
-' @startuml
-
-
-' actor "usuario" as u
-' participant "sistema" as s
-' database "base de datos" as db
-
-' u -> s:iniciarSesion(correo,contraseña)
-' activate s
-' note right of s
-'     nesesita primero tener un lector a gestionar
-' end note
-' u -> s:verUsuarios(idUsuario)
-' activate s
-' deactivate  s
-
-' u -> s:presiona eliminar sanccion
-' -> s:eliminarSanccion(idUsuario)
-' activate s
-' s -> s:verifica las sancion del usuario
-' s -> u:muestra las sancion y junto a ello da dos opciones eliminar y cancelar
-' group eliminar
-'     u -> s:presiona eliminar
-'     s -> db:Actualizar la informacion de la base de datos
-'     activate db
-'     deactivate db
-'     s -> u:muestra mensaje de eliminacion exitosa
-' else cancelar
-'     u -> s:presiona cancelar
-'     s -> u:muestra mensaje de cancelacion
-
-' end
-
-
-' deactivate s
-' @enduml

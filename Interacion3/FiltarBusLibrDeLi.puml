@@ -14,8 +14,6 @@ l-->>c:List[:libros]
 
 @enduml
 
-' @startuml
-
 ' actor "usuario" as u
 ' participant "sistema" as s
 ' database "base de datos" as db
@@ -43,4 +41,3 @@ l-->>c:List[:libros]
 ' else cancelar
 ' s->s:cieera la ventana
 ' end
-' @enduml

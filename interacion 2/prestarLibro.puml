@@ -1,4 +1,4 @@
-' @startuml
+
 ' title caso de uso: Prestar libro
 
 
@@ -55,14 +55,13 @@
 ' deactivate S
 ' -->>BD:El prestamo queda registrado
 
-' @enduml
 @startuml
 title caso de uso: Prestar libro
 
 participant ":Lector" as l
-actor "Bibliotecario" as b
-participant "Registro" as r
-participant "Sistema" as s
+participant ":Bibliotecario" as b
+participant ":Registro" as r
+' participant "Sistema" as s
 database "Base de datos" as bd
 
 ->l:solicitar_prestamo(id_libro, id_usuario)
@@ -71,22 +70,24 @@ l->b:msj1(Usuario #Nombre solicita el libro #Libro)
 b->r:detectar_sanciones(id_usuario)
 group detectar_sanciones
     note over r: detectar_sanciones devuelve true
-    s->b: msj2("El #usuario no tiene derecho a solicitar el préstamo")
+    b->b: msj2("El #usuario no tiene derecho a solicitar el préstamo")
     b->l: msj3("Sin derecho a solicitar el préstamo")
 else
     note over r: detectar_sanciones devuelve false
-    b->r: obtener_copias_disponibles(id_libro)
+    b->r: obtener_copias_disponibles(id_libro)}
     r->bd: get_copias_disponibles(id_libro)
     group detectar_copias_disponibles:
         note over r: detectar_copias_disponibles devuelve = 0
         b->r: reservar_prestamo(id_libro, id_usuario)
-        r->s: create(Reserva)
-        s->bd: insert(Reserva)
+        create ":reserva" as re
+        r->re: create(Reserva)
+        re->bd: insert(Reserva)
     else
         note over r: detectar_copias_disponibles devuelve > 0
         b->r: realizar_prestamo(id_libro, id_usuario)
-        r->s: create(Prestamo)
-        s->bd: insert(Prestamo)
+        create ":prestamo" as p
+        r->p: create(Prestamo)
+        p->bd: insert(Prestamo)
     end
 end
 activate b

@@ -1,15 +1,25 @@
 @startuml
 
 class Lector {
-  - solicitarPrestamo()
-  - solicitarRegistro()
-  - renovarPrestamo()
-  - devolverLibro()
+  -id_lector
+  
+  + solicitarPrestamo()
+  + solicitarRegistro()
+  + renovarPrestamo()
+  + devolverLibro()
 }
 
 class Administrador {
-  - CrudUsuarios()
-  - CrudLibros()
+  -registrar_usuario(usuario)
+  -actualizar_usuario(usuario)
+  -ver_usuarios(id_usuario)
+  -eliminar_usuario(id_usuario)
+  -registrar_libro(id_libro)
+  -actualizar_libro(id_libro)
+  -ver_libros(id_libro)
+  -listar_libros()
+  -eliminar_libro(id_libro)
+
 }
 
 class Bibliotecario {
@@ -24,13 +34,54 @@ class Registro {
 }
 
 class CatalogoDeLibros {
-  - obtenerCopia()
+  + obtener_copia(id_libro)
+  + buscar_libro(id_libro)
+  + filtrar_busqueda(autor,categoria)
 }
 
 class Prestamo {
-  - sancionar()
+  -id_prestamo
+  -id_libro
+  -id_usuario
+  -fecha_inicio
+  -fecha_fin
+  -activo
+  
+  
+  + sancionar()
 }
+class Usuario {
+  -id_usuario
+  -nombre
+  -Apellidos
+  -correo
+  +iniciar_sesion(correo, contraseña)
+  +cerrar_sesion()
+}
+class libro{
+- IdLibro
+- Titulo
+- ISBN
+- Autor
+- Editorial
+- AnioDePublicacion
+- Edicion
+- NumeroDePaginas
+- NumeroDeCopias
+}
+class copia{
+  - IdLibro
+- Estado
 
+}
+class registro{
+  
++ finalizarPrestamo(IdPrestamo)
++ realizarPrestamo(IdLibro, IdUsuario)
++ extenderPrestamo(IdPrestamo)
++ reservarPrestamo(IdLibro, IdUsuario)
+
+}
 Lector "1" *--* "1" Prestamo
 note right of Lector: El lector puede tener un préstamo
 
