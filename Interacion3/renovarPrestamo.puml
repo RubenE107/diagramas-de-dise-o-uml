@@ -5,24 +5,32 @@ title Diagrama de secuencia: Renovar préstamo
 participant ":Lector" as L
 actor "Bibliotecario" as b
 participant ":Registro" as r
-participant "Sistema" as s
 database "Base de datos" as bd
 
-->L:renovar_prestamo(id_libro, id_usuario)
+
+->L:renovar_prestamo(id_prestamo)
 activate L
 L->b:msj1(usuario #Nombre solicita renovar préstamo #prestamo)
 activate b
-b->r:extender_prestamo(id_usuario)
+b->r:extender_prestamo(id_prestamo)
 activate r
-r->r:detectar_sanciones(id_usuario)
+r->bd:detectar_sanciones(id_prestamo)
+bd-->>r: true/false
+
+
+
 group detectar_sanciones
     note over r: detectar_sanciones devuelve true
-    s->b: msj2("El #usuario no tiene derecho a renovar el préstamo")
+    b->b: msj2("El #usuario no tiene derecho a renovar el préstamo")
     b->L: msj3("Sin derecho a renovar el préstamo")
 else 
     note over r: detectar_sanciones devuelve false
-    s->b: msj4("Requisitos para la extension cumplidos")
-    r->bd:actualizar_prestamo(id_prestamo, fecha_nueva)
+    b->b: msj4("Requisitos para la extension cumplidos")
+    r->bd:get_prestamo(id_prestamo)
+    create ":prestamo" as p
+    bd->p:create()
+    p-->>r:[:prestamo]
+    r->bd:update_prestamo(:prestamo)
     activate bd
     deactivate bd
     r->b:msj5("Préstamo renovado con éxito")
