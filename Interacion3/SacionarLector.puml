@@ -1,14 +1,14 @@
 @startuml
 
 actor ":prestamo" as p
-participant "sistema" as s
 participant "base de datos" as bd
 
 
 -> p: sancionar(id_prestamo, fecha_inicio, descripcion)
 activate p
-
-p->bd:insert_sancion(id_prestamo, fecha_inicio, descripcion)
+create ":sancion" as s
+p->s: create(id_prestamo)
+s->bd:insert_sancion[:sancion]
 activate bd
 deactivate p
 deactivate bd
