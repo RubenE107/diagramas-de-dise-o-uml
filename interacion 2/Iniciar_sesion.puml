@@ -7,12 +7,17 @@ database "Base de datos" as BD
 activate u
 u->BD: validar_credenciales(correo, contraseña)
 activate BD
-BD-->>u
+
 deactivate BD
 
 group if
-u --> u: msj(sesion iniciada)
+
+BD-->>u:create()
 note left: Si las credenciales son correctas
+activate u
+deactivate u
+u --> u: msj(sesion iniciada)
+
 else
 u --> u: msj(Error al iniciar sesión)
 note left: Si las credenciales son incorrectas
