@@ -1,4 +1,5 @@
 @startuml
+title Caso de uso: Cerrar sesión
 participant ":usuario" as l
 
 
