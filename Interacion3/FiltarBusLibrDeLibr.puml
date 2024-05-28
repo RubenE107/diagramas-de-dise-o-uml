@@ -2,6 +2,14 @@
 title caso de uso: filtrar libros
 
 participant "catalogo_de_libro" as c
+database "base de datos" as db
+
+->c:filtrarBusqueda(autor,categoria)
+activate c
+c->db:get_libros(autor,categoria)
+create ":libro" as l
+db->l:create()
+l-->>c:List[:libros]
 
 
 @enduml
