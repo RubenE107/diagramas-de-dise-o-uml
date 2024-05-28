@@ -1,18 +1,22 @@
 @startuml
+title caso de uso: listar lectores sancionados
+actor ":abministrador" as a
+ 
 
-actor ":abministrador" as u
-database "base de datos" as db  
+-> a: listar_lectores_sancionados()
+activate a
+a->db:get_lectores_sancionados()
+  create ":usuario" as u
+  db->u: create()
+a<<--u:list:usuario
+database "base de datos" as db 
 
--> u: listar_lectores_sancionados()
-activate u
-u->db:get_lectores_sancionados()
 activate db
 deactivate db
 
+deactivate a
 
-deactivate u
-
-
+@enduml
 ' u -> s:iniciarSesion(correo,contraseña)
 ' activate s
 ' u -> s:el usuario presiona boton de ver lectores sancionados
@@ -35,4 +39,3 @@ deactivate u
 ' deactivate s
 
 
-@enduml
