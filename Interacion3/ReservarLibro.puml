@@ -1,23 +1,25 @@
 @startuml
-actor ":Lector" as L
+title caso de uso: Reservar libro
+participant ":Lector" as L
 actor "Bibliotecario" as b 
-participant "Sistema" as s
+
 database "Base de datos" as db
 
 ->L:solicitar_reservacion(id_libro, id_usuario)
 activate L
 L->b:msj1(usuario #Nombre_id solicita reservar libro #informacion_libro)
-b->b:reservar_prestamo(id_libro, id_usuario)
+b->b:reservar_prestamo(id_libro, id_usuario, fecha_reservacion)
 activate b
-
-b->db:insertar_reservacion(id_libro, id_usuario)
+create ":reservacion" as l
+b->l:create(id_libro, id_usuario, fecha_reservacion)
+l->db:insert_reservacion(:reservacion)
 activate db
 deactivate db
-deactivate b
-s->b:msj2(reservacion exitosa)
+
+b->b:msj2(reservacion exitosa)
 b->L:msj3(reservacion exitosa)
 
-
+deactivate b
 
 
 
@@ -52,5 +54,4 @@ deactivate L
 ' deactivate  s
 
 
-deactivate s
 @enduml
