@@ -1,34 +1,57 @@
-@startuml
-title caso de uso: eliminar libro
+' title caso de uso: eliminar libro
 
-actor "usuario" as U
-participant "sistema" as S
-database "base de datos" as BD
--->>S: SesionIniciada()
-activate S
-U->S:Selecionar libro a eliminar
-U->S:El usuario selecciona el boton de eliminar usuario
+' actor "usuario" as U
+' participant "sistema" as S
+' database "base de datos" as BD
+' -->>S: SesionIniciada()
+' activate S
+' U->S:Selecionar libro a eliminar
+' U->S:El usuario selecciona el boton de eliminar usuario
 
-activate S
--->>S: Eliminarlibro()
-group eliminar usuario
-S->U:muestra mensaje de confirmacion  y dos botones (Aceptar, Cancelar)
-group Aceptar
-    U->S:El usuario selecciona el boton de aceptar
+' activate S
+' -->>S: Eliminarlibro()
+' group eliminar usuario
+' S->U:muestra mensaje de confirmacion  y dos botones (Aceptar, Cancelar)
+' group Aceptar
+'     U->S:El usuario selecciona el boton de aceptar
     
-    S->BD: Eliminar libro
-    activate BD
-    BD->S:libro eliminado
-    deactivate BD
-    S<->U:mensaje de confirmacion
- end
-group cancelar
-    U->S:El usuario selecciona el boton de cancelar
-    S->S:cierra la ventana de confirmacion y cancela la operacion
-end
+'     S->BD: Eliminar libro
+'     activate BD
+'     BD->S:libro eliminado
+'     deactivate BD
+'     S<->U:mensaje de confirmacion
+'  end
+' group cancelar
+'     U->S:El usuario selecciona el boton de cancelar
+'     S->S:cierra la ventana de confirmacion y cancela la operacion
+' end
+' end
+
+' deactivate S
+' S->U:muestra la pagina principal
+
+@startuml
+title Caso de uso: Eliminar Libro
+
+actor ":Administrador" as a
+database ":BaseDeDatos" as bd
+
+-> a:eliminarLibro(Id_libro)
+activate a
+a->a:msj(confirmacion)
+group aceptar
+    a->bd:delete_libro(id_libro)
+    activate bd
+    bd->a:msj(libro Eliminado)
+    deactivate bd
+else cancelar
+    a->a:msj(operacion Cancelada)
 end
 
-deactivate S
-S->U:muestra la pagina principal
+activate bd
+
+deactivate bd
+
+deactivate a
 
 @enduml

@@ -36,7 +36,7 @@ title Caso de uso: Eliminar Usuario
 actor ":Administrador" as a
 database ":BaseDeDatos" as bd
 
--> a:eliminarUsuario(IdUsuario)
+-> a:eliminarUsuario(id_usuario)
 activate a
 a->a:msj(confirmacion)
 group aceptar
