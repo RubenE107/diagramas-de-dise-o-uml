@@ -1,45 +1,76 @@
-@startuml 
-title caso de uso: Registrar libro
-actor "usuario" as u
-participant "sistema" as s
-database "base de datos" as db
-u -->> s: SesionIniciada()
-activate s
-u -> s: presiona el boton nuevo libro
--->> s: RegistraLibro()
-activate s
-s -> u: muestra formulario
-group llenado de formulario
-u -> s: llena formulario(Título,Autor,Editorial, etc.)
-    activate s
-    group libro existente
-          s -> db: busca libro
-            activate db
-            db -> s: libro encontrado
-            deactivate db
-            s -> u: muestra mensaje de libro existente
-            
-            deactivate s
-    end
-    
-    
-    group campos vacios
-          s -> u: muestra mensaje de campos vacios
-          activate s
-          s -> u: pide llenar campos correctamente
-          deactivate s
-    end       
-    
+@startuml
 
+title Caso de uso: Registrar Libro
+
+participant "Administrador" as a
+database "BaseDeDatos" as db
+
+a -> a:registrar_libro(id_libro, titulo, isbn, autor, editorial, anio_de_publicacion, edicion, numero_de_paginas, numero_de_copia)
+activate a
+create ":Libro" as l
+a -> l:create(id_libro, titulo, isbn, autor, editorial, anio_de_publicacion, edicion, numero_de_paginas, numero_de_copia)
+activate l
+l-->>a::libro
+deactivate l
+a -> db:insert_libro(:libro)
+activate db
+group if 
+note right of a :si el libro ya existe
+a<<--db:msj("libro ya registrado")
+else
+note right of a :si el libro no existe
+a<<--db:msj("libro registrado")
 end
-s -> s: verifica datos
-s -> db: guarda datos
+
 activate db
 deactivate db
-s -> u: muestra mensaje de exito
-s -->> s: cierra ventana al cabo de 5 segundos
+deactivate a
+
+
+
+
+
+' title caso de uso: Registrar libro
+' actor "usuario" as u
+' participant "sistema" as s
+' database "base de datos" as db
+' u -->> s: SesionIniciada()
+' activate s
+' u -> s: presiona el boton nuevo libro
+' -->> s: RegistraLibro()
+' activate s
+' s -> u: muestra formulario
+' group llenado de formulario
+' u -> s: llena formulario(Título,Autor,Editorial, etc.)
+'     activate s
+'     group libro existente
+'           s -> db: busca libro
+'             activate db
+'             db -> s: libro encontrado
+'             deactivate db
+'             s -> u: muestra mensaje de libro existente
+            
+'             deactivate s
+'     end
+    
+    
+'     group campos vacios
+'           s -> u: muestra mensaje de campos vacios
+'           activate s
+'           s -> u: pide llenar campos correctamente
+'           deactivate s
+'     end       
+    
+
+' end
+' s -> s: verifica datos
+' s -> db: guarda datos
+' activate db
+' deactivate db
+' s -> u: muestra mensaje de exito
+' s -->> s: cierra ventana al cabo de 5 segundos
 
 
       
-deactivate s
+' deactivate s
 @enduml
