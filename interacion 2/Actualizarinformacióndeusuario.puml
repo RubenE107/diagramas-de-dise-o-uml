@@ -1,37 +1,67 @@
 @startuml
-title caso de uso: Actualizar informacion de usuario
-actor "usuario" as U
-participant "sistema" as S
-database "base de datos" as BD
+' title caso de uso: Actualizar informacion de usuario
+' actor "usuario" as U
+' participant "sistema" as S
+' database "base de datos" as BD
 
--->>S:Sesioniniciada()
-activate S
--->S: ActualizarDatos()
-activate S
-U->S: Clik en el boton de actualizar
-S->BD: Buscar datos
-activate BD
+' -->>S:Sesioniniciada()
+' activate S
+' -->S: ActualizarDatos()
+' activate S
+' U->S: Clik en el boton de actualizar
+' S->BD: Buscar datos
+' activate BD
 
-BD->S: Datos encontrados
-deactivate BD
-S->U: Mostrar datos en pantalla
-group Modificar datos
-    U->S: Modificar datos
-    group campos vacios
-        U->S: Dejar campos vacios
-        S->U: mensaje("Campos vacios")
-        end
-    group datos incorrectos
-        U->S: Ingresar datos incorrectos
-        S->U: mensaje("Datos incorrectos")
-    end
-end
+' BD->S: Datos encontrados
+' deactivate BD
+' S->U: Mostrar datos en pantalla
+' group Modificar datos
+'     U->S: Modificar datos
+'     group campos vacios
+'         U->S: Dejar campos vacios
+'         S->U: mensaje("Campos vacios")
+'         end
+'     group datos incorrectos
+'         U->S: Ingresar datos incorrectos
+'         S->U: mensaje("Datos incorrectos")
+'     end
+' end
 
-S->BD: actualizar datos
-activate BD
-deactivate BD
-S->U: mensaje("Datos actualizados")
-deactivate S
+' S->BD: actualizar datos
+' activate BD
+' deactivate BD
+' S->U: mensaje("Datos actualizados")
+' deactivate S
 
+title Caso de uso: Actualizar Información de Usuario
+
+actor ":Administrador" as a
+database ":BaseDeDatos" as bd
+
+
+-> a:actualizarInformacionUsuario(id_usuario, nueva_informacion{})
+activate a
+
+a -> bd:get_usuario(id_usuario)
+activate bd
+deactivate bd
+
+create ":Usuario" as usuario
+a -> usuario:create(datosUsuario)
+activate usuario
+
+a -> usuario:update_usuario(id_usuario,nueva_informacion)
+activate usuario
+
+usuario --> a::usuario
+deactivate usuario
+
+a -> bd:update_usuario(:usuario)
+activate bd
+
+
+deactivate bd
+
+deactivate a
 
 @enduml
