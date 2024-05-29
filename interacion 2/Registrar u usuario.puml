@@ -1,26 +1,54 @@
-@startuml 
+@startuml
 title Caso de uso: Registrar Usuario
 
-actor Administrador as U
-participant Sistema
+participant "Administrador" as a
+database "BaseDeDatos" as db
 
 
 
-->> Sistema: RegistrarUsuario()
-activate Sistema
-U->> Sistema: Click en "Registrarse"
-group Administrador
-
-Sistema->>U: Mostrar formulario (Nombre, Apellidos, Correo, Contraseña, Rol)
-U->> Sistema: Ingresar datos y click en "Registrarse"
-
-
-else Lector 
-
-Sistema->>U: Mostrar formulario (Nombre, Apellidos, Correo, Contraseña)
-U->> Sistema: Ingresar datos y click en "Registrarse"
-
-
+ -> a:registrar_usuario(id_usuario, nombre, apellido, correo, contraseña)
+activate a
+create ":Usuario" as u
+a -> u:create(id_usuario, nombre, apellido, correo, contraseña)
+activate u
+u-->>a::usuario
+deactivate u
+a -> db:insert_suario(:usuario)
+group if 
+note right of a :si el correo se repite
+a<<--db:msj("correo repetido, intente con otro correo")
+else
+note right of a :si el correo no se repite
+a<<--db:msj("usuario registrado")
 end
+
+activate db
+deactivate db
+deactivate a
+
+
+
+
+
+
+' actor ":Administrador" as U
+' participant Sistema
+' ->> Sistema: RegistrarUsuario()
+' activate Sistema
+' U->> Sistema: Click en "Registrarse"
+' group Administrador
+
+' Sistema->>U: Mostrar formulario (Nombre, Apellidos, Correo, Contraseña, Rol)
+' U->> Sistema: Ingresar datos y click en "Registrarse"
+
+
+' else Lector 
+
+' Sistema->>U: Mostrar formulario (Nombre, Apellidos, Correo, Contraseña)
+' U->> Sistema: Ingresar datos y click en "Registrarse"
+' end
+
+
+
 
 @enduml
