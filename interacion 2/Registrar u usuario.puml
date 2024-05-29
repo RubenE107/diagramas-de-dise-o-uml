@@ -6,10 +6,10 @@ database "BaseDeDatos" as db
 
 
 
- -> a:registrar_usuario(id_usuario, nombre, apellido, correo, contraseña)
+ -> a:registrar_usuario(nombre, apellido, correo, contraseña)
 activate a
 create ":Usuario" as u
-a -> u:create(id_usuario, nombre, apellido, correo, contraseña)
+a -> u:create(nombre, apellido, correo, contraseña)
 activate u
 u-->>a::usuario
 deactivate u
