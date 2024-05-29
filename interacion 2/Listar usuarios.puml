@@ -1,24 +1,54 @@
 @startuml
-title caso de uso: listar usuarios
- actor "Administrador" as u
-participant "sistema" as s
-database "Base de datos" as DB
--->>s: Sesioniniciada()
-activate s
--->>s: listarUsuarios()
-activate s
-u->>s: El usuario da click en el menu de la aplicacion
-u->>s: El usuario da click en la opcion usuarios
+' title caso de uso: listar usuarios
+'  actor "Administrador" as u
+' participant "sistema" as s
+' database "Base de datos" as DB
+' -->>s: Sesioniniciada()
+' activate s
+' -->>s: listarUsuarios()
+' activate s
+' u->>s: El usuario da click en el menu de la aplicacion
+' u->>s: El usuario da click en la opcion usuarios
 
-s->>DB: SELECT * FROM usuarios
-activate DB
-DB->>s: Lista de usuarios
-deactivate DB
-s->>u: El sistema abre ventana y despliega la lista de usuarios
+' s->>DB: SELECT * FROM usuarios
+' activate DB
+' DB->>s: Lista de usuarios
+' deactivate DB
+' s->>u: El sistema abre ventana y despliega la lista de usuarios
 
-    note right of u: El administrador navegar usando la scrull del mouse
+'     note right of u: El administrador navegar usando la scrull del mouse
 
-deactivate s
+' deactivate s
 
+title Caso de uso: Listar Libros
+
+actor ":Usuario" as u
+participant ":CatalogoDeLibros" as c
+database ":BaseDeDatos" as bd
+participant ":Libro" as l
+
+-> u:listar_libros()
+activate u
+
+u -> c:obtenerLibros()
+activate c
+
+c -> bd:consultarLibros()
+activate bd
+
+bd --> c:datosLibros
+deactivate bd
+
+create ":Libro" as libro
+c -> libro:create(datosLibros)
+activate libro
+
+libro-->>c::libro
+deactivate libro
+
+c --> u::libro
+deactivate c
+
+deactivate u
 
 @enduml
