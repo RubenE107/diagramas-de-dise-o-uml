@@ -1,47 +1,86 @@
 @startuml
-title caso de uso: Actualizar libro
+' title caso de uso: Actualizar libro
 
-actor "usuario" as u
-participant "sistema" as s
-database "base de datos" as db
+' actor "usuario" as u
+' participant "sistema" as s
+' database "base de datos" as db
 
-u -->> s: sesionIniciada()
-activate s
-s->s: verificar el tipo de usuario
-note left of s
-  si es administrador o bibliotecario
-  se le muestra la opcion de actualizar
+' u -->> s: sesionIniciada()
+' activate s
+' s->s: verificar el tipo de usuario
+' note left of s
+'   si es administrador o bibliotecario
+'   se le muestra la opcion de actualizar
 
-end note
-u->s: buscar libro
-s->db: buscar libro
-activate db
-db->s: libro encontrado
-deactivate db
-s->u: mostrar datos del libro
-u-->>s: ActualizarLibro()
-activate s
-u->s: presiona boton actualizar datos de libro
+' end note
+' u->s: buscar libro
+' s->db: buscar libro
+' activate db
+' db->s: libro encontrado
+' deactivate db
+' s->u: mostrar datos del libro
+' u-->>s: ActualizarLibro()
+' activate s
+' u->s: presiona boton actualizar datos de libro
 
-group Actualizar libro
-s->u: mostrar formulario de actualizacion con los datos del libro
-u->s: modifica los datos del libro
-u->s: presiona boton guardar
-else campos vacios
-s->u: mostrar mensaje de error
-s->u: vuelve a mostrar formulario
-s->u: pide que llene los campos
+' group Actualizar libro
+' s->u: mostrar formulario de actualizacion con los datos del libro
+' u->s: modifica los datos del libro
+' u->s: presiona boton guardar
+' else campos vacios
+' s->u: mostrar mensaje de error
+' s->u: vuelve a mostrar formulario
+' s->u: pide que llene los campos
 
-end
-s->db: actualizar libro
-activate db
-db->s: libro actualizado
-deactivate db
-s->u: mostrar mensaje de exito
-u<-s: la ventana cierra despues de 3 segundos
-deactivate s
-s->u: vuelve a la pagina de busqueda
+' end
+' s->db: actualizar libro
+' activate db
+' db->s: libro actualizado
+' deactivate db
+' s->u: mostrar mensaje de exito
+' u<-s: la ventana cierra despues de 3 segundos
+' deactivate s
+' s->u: vuelve a la pagina de busqueda
 
+
+title Caso de uso: Actualizar Libro
+
+actor ":Administrador" as a
+database ":BaseDeDatos" as bd
+participant ":Abministrador" as r
+participant ":Libro" as l
+
+-> a:actualizar_libro(id_libro, nueva_informacion)
+activate a
+
+a -> r:ver_libro(Id_libro)
+activate r
+
+r -> bd:get_libro(id_libro)
+activate bd
+
+bd --> r:datos_libro
+deactivate bd
+
+r --> a:datos_libro
+deactivate r
+
+create ":Libro" as libro
+a -> libro:create(datos_libro)
+activate libro
+
+a -> libro:update_informacion(nueva_informacion)
+activate libro
+
+
+deactivate libro
+
+a -> bd:update_libro(id_libro, nueva_informacion)
+activate bd
+
+deactivate bd
+
+deactivate a
 
 
 
