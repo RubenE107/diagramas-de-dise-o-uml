@@ -22,30 +22,35 @@ title caso de uso: listar libros
 ' end note
 ' s -->> u: muestra todos los libros
 
+title Caso de uso: Listar Libros
 
-
-title Caso de uso: Listar Usuarios
-
-actor ":Administrador" as a
+actor ":Usuario" as u
+participant ":CatalogoDeLibros" as c
 database ":BaseDeDatos" as bd
-participant ":Usuario" as u
+participant ":Libro" as l
 
--> a:listar_usuarios()
-activate a
+-> u:listar_libros()
+activate u
 
-a -> bd:get_usuarios()
+u -> c:obtenerLibros()
+activate c
+
+c -> bd:consultarLibros()
 activate bd
 
-bd --> a:datosUsuarios
+bd --> c:datosLibros
 deactivate bd
 
-create ":Usuario" as usuario
-a -> usuario:create(datosUsuarios)
-activate usuario
+create ":Libro" as libro
+c -> libro:create(datosLibros)
+activate libro
 
-usuario-->>a::usuario
-deactivate usuario
+libro-->>c::libro
+deactivate libro
 
-deactivate a
+c --> u::libro
+deactivate c
+
+deactivate u
 
 @enduml

@@ -19,36 +19,28 @@
 '     note right of u: El administrador navegar usando la scrull del mouse
 
 ' deactivate s
+title Caso de uso: Listar Usuarios
 
-title Caso de uso: Listar Libros
-
-actor ":Usuario" as u
-participant ":CatalogoDeLibros" as c
+actor ":Administrador" as a
 database ":BaseDeDatos" as bd
-participant ":Libro" as l
+participant ":Usuario" as u
 
--> u:listar_libros()
-activate u
+-> a:listar_usuarios()
+activate a
 
-u -> c:obtenerLibros()
-activate c
-
-c -> bd:consultarLibros()
+a -> bd:get_usuarios()
 activate bd
 
-bd --> c:datosLibros
+bd --> a:datosUsuarios
 deactivate bd
 
-create ":Libro" as libro
-c -> libro:create(datosLibros)
-activate libro
+create ":Usuario" as usuario
+a -> usuario:create(datosUsuarios)
+activate usuario
 
-libro-->>c::libro
-deactivate libro
+usuario-->>a::usuario
+deactivate usuario
 
-c --> u::libro
-deactivate c
-
-deactivate u
+deactivate a
 
 @enduml
