@@ -1,25 +1,55 @@
 @startuml
 title caso de uso: disponibilidad de libros
 
-actor "Usuario" as U
+' actor "Usuario" as U
 
-participant "sistema" as S
-database "base de datos" as BD
-U-->>S: sesionIniciada()
-activate S
-U-->>S: presiona el boton de ver disponibilidad del libro
--->>S: disponibilidadLibro()
-activate S
-S-->>BD: Select * from libros
-activate BD
-BD-->>S: lista de libros
-deactivate BD
-S-->>S: verifica el estado de los libro
-S-->>U: muestra el numero de libros disponibles
-S-->>U: muestra los libros disponibles
-S-->>U: muestra el boton de aceptar
-U->>S: presiona el boton de aceptar
-S->>S: cierra la ventana
-deactivate S 
+' participant "sistema" as S
+' database "base de datos" as BD
+' U-->>S: sesionIniciada()
+' activate S
+' U-->>S: presiona el boton de ver disponibilidad del libro
+' -->>S: disponibilidadLibro()
+' activate S
+' S-->>BD: Select * from libros
+' activate BD
+' BD-->>S: lista de libros
+' deactivate BD
+' S-->>S: verifica el estado de los libro
+' S-->>U: muestra el numero de libros disponibles
+' S-->>U: muestra los libros disponibles
+' S-->>U: muestra el boton de aceptar
+' U->>S: presiona el boton de aceptar
+' S->>S: cierra la ventana
+' deactivate S 
+
+
+title Caso de uso: Disponibilidad de Libro
+
+participant ":Administrador" as a
+database ":BaseDeDatos" as bd
+participant ":Libro" as l
+participant ":Copia" as co
+
+-> a:disponibilidadLibro(IdLibro)
+activate a
+
+a -> bd:get_ibro(IdLibro)
+activate bd
+
+bd --> a:datosLibro
+deactivate bd
+
+create ":Libro" as libro
+a -> libro:create(datosLibro)
+activate libro
+
+libro -> co:obtenerCopiasDisponibles()
+activate co
+
+co --> a:int:estado
+deactivate co
+
+
+deactivate a
 
 @enduml
