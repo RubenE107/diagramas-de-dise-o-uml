@@ -52,14 +52,14 @@ activate a
 a -> bd:get_prestamo(Id_prestamo)
 activate bd
 
-bd --> a:datosPrestamo
+bd --> a:datos_prestamo
 deactivate bd
 
 create ":Prestamo" as prestamo
 a -> prestamo:create(datosPrestamo)
 
 
-a -> r:finalizarPrestamo()
+a -> r:finalizar_prestamo()
 activate r
 
 
