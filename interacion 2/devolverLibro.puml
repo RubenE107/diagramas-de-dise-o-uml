@@ -1,38 +1,79 @@
-@startuml
-title caso de uso: Devolver libro
 
-actor "Lector" as U
-actor "Bibliotecario" as B
-participant "sistema" as S
-database "base de datos" as BD
--->>S: SesionIniciada()
-activate S
-B -> S: presiona boton devolver libro
-S->S: DevolverLibro()
-activate S
-S->B: muestra formulario
-B->S : ingresa datos y presiona boton continuar
-S->BD: busca libro
-BD->S: libro encontrado
-S->S : confirma los datos
-group verificacion
-S->S: verifica si el lector es acreedor a una sanccion
-S->B:muestra los datos del libro y del lector que lo devuelve
-else fecha limite vencida
-S->S: verifica si el libro se devolvio en la fecha limite
-S->S: sancciona al lector
-S->B: muestra mensaje de sanccion
-S-> S:el proceso continua
-end
-S->B: pide la confirmacion de la devolucion mediante dos botones(realizar devoluicion, cancelar)
-B->S: confirma la devolucion 
-S->BD: actualiza la base de datos
-activate BD
-BD->S: actualizacion exitosa
-S->B: muestra mensaje de exito
-deactivate BD
-deactivate S
--->>BD: los datos del libro devuelto se actualizan en la base de datos
--->>BD:el libro se marca como disponible
+' title caso de uso: Devolver libro
+
+' actor "Lector" as U
+' actor "Bibliotecario" as B
+' participant "sistema" as S
+' database "base de datos" as BD
+' -->>S: SesionIniciada()
+' activate S
+' B -> S: presiona boton devolver libro
+' S->S: DevolverLibro()
+' activate S
+' S->B: muestra formulario
+' B->S : ingresa datos y presiona boton continuar
+' S->BD: busca libro
+' BD->S: libro encontrado
+' S->S : confirma los datos
+' group verificacion
+' S->S: verifica si el lector es acreedor a una sanccion
+' S->B:muestra los datos del libro y del lector que lo devuelve
+' else fecha limite vencida
+' S->S: verifica si el libro se devolvio en la fecha limite
+' S->S: sancciona al lector
+' S->B: muestra mensaje de sanccion
+' S-> S:el proceso continua
+' end
+' S->B: pide la confirmacion de la devolucion mediante dos botones(realizar devoluicion, cancelar)
+' B->S: confirma la devolucion 
+' S->BD: actualiza la base de datos
+' activate BD
+' BD->S: actualizacion exitosa
+' S->B: muestra mensaje de exito
+' deactivate BD
+' deactivate S
+' -->>BD: los datos del libro devuelto se actualizan en la base de datos
+' -->>BD:el libro se marca como disponible
+@startuml
+title Caso de uso: Devolver Libro
+
+actor ":Lector" as l
+actor ":bibliotecario" as a
+database ":BaseDeDatos" as bd
+
+participant ":Registro" as r
+
+-> l:devolver_libro(id_prestamo)
+activate l
+
+l -> a:recibir_solicitudes_devolucion()
+activate a
+
+a -> bd:get_prestamo(Id_prestamo)
+activate bd
+
+bd --> a:datosPrestamo
+deactivate bd
+
+create ":Prestamo" as prestamo
+a -> prestamo:create(datosPrestamo)
+
+
+a -> r:finalizarPrestamo()
+activate r
+
+
+
+
+
+r -> bd:update_prestamo(IdPrestamo)
+deactivate r
+activate bd
+
+deactivate bd
+
+deactivate a
+
+deactivate l
 
 @enduml
