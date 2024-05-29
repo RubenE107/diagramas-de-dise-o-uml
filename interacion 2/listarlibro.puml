@@ -1,26 +1,51 @@
 @startuml
 title caso de uso: listar libros
 
-actor "usuario" as u
-participant "sistema" as s
-database "base de datos" as db
+' actor "usuario" as u
+' participant "sistema" as s
+' database "base de datos" as db
 
-u -->> s: sesionIniciada()
-activate s
-u -> s: presiona el boton de listar todos los libros
- ->s: listarLibros()
- activate s
-s -> db: select * from libros
-activate db
-db -->> s: lista de libros
-deactivate db
-s -> s: abre la ventana y muestra los libros
-deactivate s
-note right of s
-El usuario puede ver los libros y navegar
-con el scroll del mouse
-end note
-s -->> u: muestra todos los libros
+' u -->> s: sesionIniciada()
+' activate s
+' u -> s: presiona el boton de listar todos los libros
+'  ->s: listarLibros()
+'  activate s
+' s -> db: select * from libros
+' activate db
+' db -->> s: lista de libros
+' deactivate db
+' s -> s: abre la ventana y muestra los libros
+' deactivate s
+' note right of s
+' El usuario puede ver los libros y navegar
+' con el scroll del mouse
+' end note
+' s -->> u: muestra todos los libros
 
+
+
+title Caso de uso: Listar Libros
+
+actor ":Usuario" as u
+database ":BaseDeDatos" as bd
+participant ":Libro" as l
+
+-> u:listar_libros()
+activate u
+
+u -> bd:get_libros()
+activate bd
+
+bd --> u:datosLibros
+deactivate bd
+
+create ":Libro" as libro
+u -> libro:create(datosLibros)
+activate libro
+
+libro-->>u::libro
+deactivate libro
+
+deactivate u
 
 @enduml
