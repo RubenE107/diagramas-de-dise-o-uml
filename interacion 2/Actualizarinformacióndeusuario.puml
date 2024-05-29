@@ -39,7 +39,7 @@ actor ":Administrador" as a
 database ":BaseDeDatos" as bd
 
 
--> a:actualizarInformacionUsuario(id_usuario, nueva_informacion{})
+-> a:actualizar_usuario(id_usuario, nueva_informacion{})
 activate a
 
 a -> bd:get_usuario(id_usuario)
