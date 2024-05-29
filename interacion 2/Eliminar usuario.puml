@@ -1,34 +1,59 @@
 @startuml
 title caso de uso: eliminar usuario
 
-actor "usuario" as U
-participant "sistema" as S
-database "base de datos" as BD
--->>S: SesionIniciada()
-activate S
-U->S:Selecionar usuario a eliminar
-U->S:El usuario selecciona el boton de eliminar usuario
+' actor "usuario" as U
+' participant "sistema" as S
+' database "base de datos" as BD
+' -->>S: SesionIniciada()
+' activate S
+' U->S:Selecionar usuario a eliminar
+' U->S:El usuario selecciona el boton de eliminar usuario
 
-activate S
--->>S: EliminarUsuario()
-group eliminar usuario
-S->U:muestra mensaje de confirmacion  y dos botones (Aceptar, Cancelar)
-group Aceptar
-    U->S:El usuario selecciona el boton de aceptar
+' activate S
+' -->>S: EliminarUsuario()
+' group eliminar usuario
+' S->U:muestra mensaje de confirmacion  y dos botones (Aceptar, Cancelar)
+' group Aceptar
+'     U->S:El usuario selecciona el boton de aceptar
     
-    S->BD: Eliminar usuario
-    activate BD
-    BD->S:Usuario eliminado
-    deactivate BD
-    S<->U:mensaje de confirmacion
- end
-group cancelar
-    U->S:El usuario selecciona el boton de cancelar
-    S->S:cierra la ventana de confirmacion y cancela la operacion
-end
+'     S->BD: Eliminar usuario
+'     activate BD
+'     BD->S:Usuario eliminado
+'     deactivate BD
+'     S<->U:mensaje de confirmacion
+'  end
+' group cancelar
+'     U->S:El usuario selecciona el boton de cancelar
+'     S->S:cierra la ventana de confirmacion y cancela la operacion
+' end
+' end
+
+' deactivate S
+' S->U:muestra la pagina principal
+
+title Caso de uso: Eliminar Usuario
+
+actor ":Administrador" as a
+database ":BaseDeDatos" as bd
+
+-> a:eliminarUsuario(IdUsuario)
+activate a
+a->a:msj(confirmacion)
+group aceptar
+    a->bd:delete_usuario(id_usuario)
+    activate bd
+    bd->a:msj(usuario Eliminado)
+    deactivate bd
+else cancelar
+    a->a:msj(operacion Cancelada)
 end
 
-deactivate S
-S->U:muestra la pagina principal
+activate bd
+
+deactivate bd
+
+deactivate a
+
+@enduml
 
 @enduml
