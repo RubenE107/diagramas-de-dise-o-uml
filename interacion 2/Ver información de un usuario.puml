@@ -1,26 +1,47 @@
 @startuml
 title caso de uso: ver informacion de usuario
-actor "Usuario" as U
-participant "sistema" as S
-database "Base de datos" as BD
--->>S: SesionIniciada()
-activate S
--->>S: VerInformacionUsuario()
-activate S
-U->S: presiona el boton de de ver informacion
+' actor "Usuario" as U
+' participant "sistema" as S
+' database "Base de datos" as BD
+' -->>S: SesionIniciada()
+' activate S
+' -->>S: VerInformacionUsuario()
+' activate S
+' U->S: presiona el boton de de ver informacion
 
 
-S->BD: consulta la informacion
-activate BD
-BD->S: devuelve la informacion
-deactivate BD
-S->U: muestra la informacion en pantalla
-U->S: presiona el boton de aceptar
-S->S:cierra la ventana
-deactivate S
+' S->BD: consulta la informacion
+' activate BD
+' BD->S: devuelve la informacion
+' deactivate BD
+' S->U: muestra la informacion en pantalla
+' U->S: presiona el boton de aceptar
+' S->S:cierra la ventana
+' deactivate S
 
 
+title Caso de uso: Ver Información de Usuario
+
+actor ":Administrador" as a
+database ":BaseDeDatos" as bd
 
 
+-> a:ver_usuario(id_usuario)
+activate a
+
+a -> bd:get_usuario(id_usuario)
+activate bd
+
+bd --> a:datosUsuario
+deactivate bd
+
+create ":Usuario" as usuario
+a -> usuario:create(datosUsuario)
+activate usuario
+
+usuario-->>a::usuario
+deactivate usuario
+
+deactivate a
 
 @enduml
